@@ -57,6 +57,8 @@ Aim for 2-4 sentences per response, using proper paragraph structure when needed
 // AI response generator using OpenAI
 async function generateAIResponse(userMessage, conversationHistory) {
     try {
+        console.log('Calling OpenAI API with message:', userMessage);
+        
         // Build messages array for OpenAI
         const messages = [
             { role: 'system', content: SYSTEM_PROMPT }
@@ -73,6 +75,8 @@ async function generateAIResponse(userMessage, conversationHistory) {
         // Add current user message
         messages.push({ role: 'user', content: userMessage });
         
+        console.log('OpenAI messages array length:', messages.length);
+        
         // Call OpenAI API
         const completion = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo',
@@ -81,11 +85,18 @@ async function generateAIResponse(userMessage, conversationHistory) {
             max_tokens: 150,
         });
         
+        console.log('OpenAI API call successful');
         return completion.choices[0].message.content;
     } catch (error) {
-        console.error('OpenAI API Error:', error);
+        console.error('OpenAI API Error Details:', {
+            message: error.message,
+            type: error.type,
+            code: error.code,
+            status: error.status
+        });
         
         // Fallback to simple responses if OpenAI fails
+        console.log('Using fallback response due to OpenAI error');
         const fallbackResponses = {
             'hello': 'Hello! How can I help you today?',
             'how are you': "I'm doing great, thank you for asking! How are you doing?",
@@ -148,7 +159,10 @@ app.post('/api/chat', async (req, res) => {
     try {
         const { message, history = [] } = req.body;
         
+        console.log('Received chat request:', { message, historyLength: history.length });
+        
         if (!message) {
+            console.log('No message provided');
             return res.status(400).json({ error: 'Message is required' });
         }
         
@@ -163,8 +177,15 @@ app.post('/api/chat', async (req, res) => {
             timestamp: new Date().toISOString()
         });
     } catch (error) {
-        console.error('Chat Error:', error);
-        res.status(500).json({ error: 'Failed to generate response' });
+        console.error('Chat Error Details:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        res.status(500).json({ 
+            error: 'Failed to generate response',
+            details: error.message 
+        });
     }
 });
 
