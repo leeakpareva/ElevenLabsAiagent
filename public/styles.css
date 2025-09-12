@@ -299,6 +299,7 @@ h1 {
 
 .checkbox-label input[type="checkbox"] {
     cursor: pointer;
+    accent-color: #ff0000;
 }
 
 .status-bar {
