@@ -16,7 +16,6 @@ const __dirname = dirname(__filename);
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
 // Serve landing page as default
 app.get('/', (req, res) => {
@@ -31,6 +30,9 @@ app.get('/app', (req, res) => {
     console.log('Serving app from:', appPath);
     res.sendFile(appPath);
 });
+
+// Serve static files (after route handlers)
+app.use(express.static('public'));
 
 const elevenlabs = new ElevenLabsClient({
     apiKey: process.env.ELEVENLABS_API_KEY,
