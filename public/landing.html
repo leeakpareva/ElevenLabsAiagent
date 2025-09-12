@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>NAVADA</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .landing-container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .navada-text {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #ff0000;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.6),
+                0 0 30px rgba(255, 0, 0, 0.4),
+                0 0 40px rgba(255, 0, 0, 0.2);
+            animation: glow 2s ease-in-out infinite alternate, float 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+        
+        @keyframes glow {
+            0% {
+                text-shadow: 
+                    0 0 10px rgba(255, 0, 0, 0.8),
+                    0 0 20px rgba(255, 0, 0, 0.6),
+                    0 0 30px rgba(255, 0, 0, 0.4),
+                    0 0 40px rgba(255, 0, 0, 0.2);
+            }
+            100% {
+                text-shadow: 
+                    0 0 20px rgba(255, 0, 0, 1),
+                    0 0 30px rgba(255, 0, 0, 0.8),
+                    0 0 40px rgba(255, 0, 0, 0.6),
+                    0 0 50px rgba(255, 0, 0, 0.4),
+                    0 0 60px rgba(255, 0, 0, 0.2);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .navada-text:hover {
+            animation-play-state: paused;
+            transform: scale(1.05);
+            text-shadow: 
+                0 0 30px rgba(255, 0, 0, 1),
+                0 0 40px rgba(255, 0, 0, 0.8),
+                0 0 50px rgba(255, 0, 0, 0.6),
+                0 0 70px rgba(255, 0, 0, 0.4);
+        }
+        
+        .navada-text:active {
+            transform: scale(0.98);
+        }
+        
+        /* Glitch effect on hover */
+        .navada-text::before,
+        .navada-text::after {
+            content: 'NAVADA';
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .navada-text:hover::before {
+            opacity: 0.7;
+            animation: glitch1 0.3s infinite;
+            color: #ff0000;
+            z-index: -1;
+        }
+        
+        .navada-text:hover::after {
+            opacity: 0.7;
+            animation: glitch2 0.3s infinite;
+            color: #8b0000;
+            z-index: -1;
+        }
+        
+        @keyframes glitch1 {
+            0%, 100% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+        }
+        
+        @keyframes glitch2 {
+            0%, 100% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(2px, -2px);
+            }
+            40% {
+                transform: translate(2px, 2px);
+            }
+            60% {
+                transform: translate(-2px, -2px);
+            }
+            80% {
+                transform: translate(-2px, 2px);
+            }
+        }
+        
+        .subtitle {
+            color: #ff0000;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 2s ease-in forwards;
+            animation-delay: 1s;
+            text-transform: uppercase;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 0.6;
+            }
+        }
+        
+        /* Particles background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: #ff0000;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: particle-float 10s infinite linear;
+        }
+        
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .navada-text {
+                font-size: 3rem;
+                letter-spacing: 5px;
+            }
+            
+            .subtitle {
+                font-size: 0.7rem;
+                letter-spacing: 3px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navada-text {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+        }
+        
+        /* Loading indicator */
+        .loading {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff0000;
+            font-size: 0.8rem;
+            opacity: 0;
+            animation: pulse-fade 1.5s infinite;
+            animation-delay: 2s;
+        }
+        
+        @keyframes pulse-fade {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="landing-container" onclick="enterApp()">
+        <h1 class="navada-text">NAVADA</h1>
+        <p class="subtitle">Click to Enter</p>
+    </div>
+    
+    <div class="loading">Tap anywhere to begin</div>
+    
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size
+                const size = Math.random() * 3 + 1;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random horizontal position
+                particle.style.left = Math.random() * 100 + '%';
+                
+                // Random animation delay
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                
+                // Random animation duration
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Enter the main app
+        function enterApp() {
+            // Add fade out animation
+            document.body.style.transition = 'opacity 0.5s ease';
+            document.body.style.opacity = '0';
+            
+            // Redirect after animation
+            setTimeout(() => {
+                window.location.href = '/app';
+            }, 500);
+        }
+        
+        // Initialize particles on load
+        window.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+        });
+        
+        // Add touch feedback for mobile
+        document.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

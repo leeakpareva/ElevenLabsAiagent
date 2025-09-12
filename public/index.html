@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>NAVADA</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NAVADA</h1>
+            <p class="subtitle">AI Voice Assistant</p>
+        </header>
+
+        <div class="chat-container">
+            <div id="chatMessages" class="chat-messages">
+                <div class="message ai-message">
+                    <div class="message-header">
+                        <span class="label">NAVADA</span>
+                        <span class="timestamp">--:--</span>
+                    </div>
+                    <div class="message-content">
+                        <p>Welcome to NAVADA. Hold the microphone button to speak, or type a message below.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="textInput" 
+                    placeholder="Type a message or use voice..."
+                    autocomplete="off"
+                >
+                <button id="sendBtn" class="btn btn-send" title="Send message">
+                    <span>Send</span>
+                </button>
+            </div>
+            
+            <div class="voice-controls">
+                <button id="micBtn" class="btn btn-mic" title="Start/Stop recording">
+                    <span class="mic-icon">🎤</span>
+                    <span class="mic-text">Hold to Talk</span>
+                </button>
+                <div id="recordingIndicator" class="recording-indicator hidden">
+                    <span class="pulse"></span>
+                    Recording...
+                </div>
+            </div>
+
+            <div class="settings">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="autoSpeak" checked>
+                    <span>Auto-speak responses</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="continuousMode">
+                    <span>Continuous conversation</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <span id="status">Ready</span>
+            <button id="clearBtn" class="btn-clear">Clear Chat</button>
+        </div>
+        
+        <footer class="footer">
+            <p>Designed + Coded By Lee Akpareva MBA, MA</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
