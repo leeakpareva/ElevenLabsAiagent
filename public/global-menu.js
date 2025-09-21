@@ -47,7 +47,7 @@ function createBurgerMenu() {
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                     </svg>
-                    Creative Studio
+                    Synthara
                 </a>
             </div>
             <div class="burger-menu-item">
@@ -208,7 +208,7 @@ function addGlobalFooter() {
     footer.innerHTML = `
         <div class="global-footer-content">
             <div class="global-footer-brand">
-                <h3 class="global-footer-title">MUSIC STUDIO</h3>
+                <h3 class="global-footer-title">Studio</h3>
                 <p class="global-footer-subtitle">Transforming the Future of Music Creation</p>
             </div>
             <div class="global-footer-links">

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Synthara - AI Music Studio</title>
+    <title>Synthara</title>
     <link rel="stylesheet" href="openai-styles.css">
     <style>
         /* Creative Hub Styling */
@@ -18,7 +18,7 @@
         body {
             background: radial-gradient(ellipse at top left, rgba(16, 163, 127, 0.03) 0%, transparent 50%),
                        radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.02) 0%, transparent 50%),
-                       linear-gradient(180deg, #fafafa 0%, #f8f9fa 100%);
+                       linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
             min-height: 100vh;
             overflow-x: hidden;
             overflow-y: auto;
@@ -40,13 +40,12 @@
         }
 
         .studio-title {
-            font-size: 3.5rem;
-            font-weight: 300;
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #2e2e32, #10a37f, #8b5cf6);
+            background: linear-gradient(135deg, var(--color-text-primary), var(--color-accent-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.02em;
             position: relative;
         }
 
@@ -57,18 +56,187 @@
             left: 50%;
             transform: translateX(-50%);
             width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #10a37f, transparent);
-            opacity: 0.6;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-blue));
+            border-radius: var(--radius-full);
+            animation: titleUnderline 1s ease-out 0.5s both;
+        }
+
+        @keyframes titleUnderline {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 100px;
+                opacity: 1;
+            }
+        }
+
+        /* Premium Generation Spinner */
+        .generation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .generation-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .premium-spinner {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .spinner-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+        }
+
+        .spinner-ring:nth-child(1) {
+            border-top: 3px solid #ffd700;
+            animation: premiumSpin 2s linear infinite;
+        }
+
+        .spinner-ring:nth-child(2) {
+            border-right: 3px solid #ffb347;
+            animation: premiumSpin 2s linear infinite reverse;
+            animation-delay: -0.5s;
+        }
+
+        .spinner-ring:nth-child(3) {
+            border-bottom: 3px solid #10a37f;
+            animation: premiumSpin 3s linear infinite;
+            animation-delay: -1s;
+        }
+
+        .spinner-ring:nth-child(4) {
+            border-left: 3px solid #8b5cf6;
+            animation: premiumSpin 3s linear infinite reverse;
+            animation-delay: -1.5s;
+        }
+
+        .spinner-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: premiumPulse 2s ease-in-out infinite;
+        }
+
+        .spinner-center svg {
+            width: 30px;
+            height: 30px;
+            color: #8b4513;
+        }
+
+        @keyframes premiumSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes premiumPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        .generation-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .generation-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            text-align: center;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .premium-features {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .premium-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .premium-feature svg {
+            width: 16px;
+            height: 16px;
+            color: #ffd700;
         }
 
         .studio-subtitle {
-            font-size: 1.1rem;
             color: var(--color-text-secondary);
-            margin-bottom: 0;
-            font-weight: 400;
-            font-style: italic;
-            opacity: 0.8;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .premium-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            color: #8b4513;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .premium-badge svg {
+            width: 16px;
+            height: 16px;
         }
 
         /* Creative Hub Grid */
@@ -97,15 +265,14 @@
         }
 
         .studio-panel {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-lg);
             padding: 2rem;
             position: relative;
             overflow: hidden;
             transition: all var(--transition-base);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            box-shadow: var(--shadow-sm);
         }
 
         .studio-panel::before {
@@ -120,8 +287,8 @@
 
         .studio-panel:hover {
             transform: translateY(-2px);
-            box-shadow: 0 16px 48px rgba(16, 163, 127, 0.08);
-            border-color: rgba(16, 163, 127, 0.2);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-accent-primary);
         }
 
         .panel-title {
@@ -148,20 +315,18 @@
 
         /* Advanced Waveform Visualization */
         .waveform-container {
+            background: linear-gradient(180deg, var(--color-bg-secondary), var(--color-bg-primary));
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            height: 200px;
             position: relative;
-            width: 100%;
-            height: 160px;
-            background: linear-gradient(135deg, rgba(16, 163, 127, 0.02), rgba(139, 92, 246, 0.02));
-            border-radius: 16px;
             overflow: hidden;
-            border: 1px solid rgba(16, 163, 127, 0.1);
         }
 
         .waveform-canvas {
             width: 100%;
             height: 100%;
-            display: block;
-            filter: drop-shadow(0 2px 8px rgba(16, 163, 127, 0.1));
+            border-radius: var(--radius-md);
         }
 
         .waveform-overlay {
@@ -297,10 +462,10 @@
 
         .metric-card {
             padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 16px;
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-md);
             text-align: center;
-            border: 1px solid rgba(16, 163, 127, 0.1);
+            border: 1px solid var(--color-border-primary);
             transition: all var(--transition-base);
         }
 
@@ -334,23 +499,23 @@
 
         .prompt-input {
             width: 100%;
-            min-height: 120px;
-            padding: 1.5rem;
-            border: 1px solid rgba(16, 163, 127, 0.2);
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            padding: 1rem;
+            background: var(--color-bg-secondary);
+            border: 2px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
             font-family: inherit;
             font-size: 1rem;
             color: var(--color-text-primary);
-            resize: vertical;
             transition: all var(--transition-base);
+            resize: vertical;
+            min-height: 120px;
         }
 
         .prompt-input:focus {
             outline: none;
             border-color: var(--color-accent-primary);
-            box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+            box-shadow: 0 0 0 4px rgba(16, 163, 127, 0.1);
+            background: var(--color-bg-primary);
         }
 
         .generation-controls {
@@ -397,8 +562,8 @@
         .duration-slider {
             width: 150px;
             height: 6px;
-            background: rgba(16, 163, 127, 0.2);
-            border-radius: 3px;
+            background: var(--color-border-secondary);
+            border-radius: var(--radius-full);
             position: relative;
             cursor: pointer;
         }
@@ -411,7 +576,7 @@
             height: 100%;
             width: 50%;
             background: var(--color-accent-primary);
-            border-radius: 3px;
+            border-radius: var(--radius-full);
             transition: width var(--transition-base);
         }
 
@@ -457,7 +622,15 @@
         <div class="studio-header">
             <h1 class="studio-title">Synthara</h1>
             <p class="studio-subtitle">Where AI and Sound Become One</p>
-            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+
+            <div class="premium-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Premium Studio
+            </div>
+
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;">
                 <a href="/music" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--color-bg-tertiary); color: var(--color-text-primary); border: 2px solid var(--color-border-primary); border-radius: var(--radius-md); text-decoration: none; font-weight: 500; transition: all var(--transition-base);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M15 18l-6-6 6-6"/>
@@ -541,39 +714,57 @@
                 </div>
             </div>
 
-            <!-- Real-time Metrics Panel -->
+            <!-- Premium Analytics Panel -->
             <div class="studio-panel metrics-panel">
-                <div class="panel-title">Real-time Audio Metrics</div>
+                <div class="panel-title">
+                    Premium Audio Analytics
+                    <span style="background: linear-gradient(135deg, #ffd700, #ffb347); color: #8b4513; padding: 0.25rem 0.5rem; border-radius: var(--radius-full); font-size: 0.7rem; margin-left: 0.5rem;">PRO</span>
+                </div>
                 <div class="metrics-grid">
                     <div class="metric-card">
-                        <div class="metric-label">Pitch</div>
+                        <div class="metric-label">Pitch Analysis</div>
                         <div class="metric-value" id="pitchValue">440Hz</div>
-                        <div class="metric-trend">+2.3% from last</div>
+                        <div class="metric-trend">↗ +2.3% from last track</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-label">Intensity</div>
-                        <div class="metric-value" id="intensityValue">75%</div>
-                        <div class="metric-trend">Stable</div>
+                        <div class="metric-label">Dynamic Range</div>
+                        <div class="metric-value" id="intensityValue">18.2dB</div>
+                        <div class="metric-trend">Excellent mastering</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-label">Tempo</div>
-                        <div class="metric-value" id="tempoValue">120</div>
-                        <div class="metric-trend">BPM</div>
+                        <div class="metric-label">Tempo Stability</div>
+                        <div class="metric-value" id="tempoValue">120.5</div>
+                        <div class="metric-trend">BPM • 99.8% stable</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-label">Harmony</div>
-                        <div class="metric-value" id="harmonyValue">8.2</div>
-                        <div class="metric-trend">Complex</div>
+                        <div class="metric-label">Harmonic Complexity</div>
+                        <div class="metric-value" id="harmonyValue">8.2/10</div>
+                        <div class="metric-trend">Rich harmonic content</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-label">Energy</div>
+                        <div class="metric-label">Spectral Density</div>
                         <div class="metric-value" id="energyValue">92%</div>
-                        <div class="metric-trend">High</div>
+                        <div class="metric-trend">Full frequency spectrum</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-label">Quality</div>
-                        <div class="metric-value" id="qualityValue">HD</div>
-                        <div class="metric-trend">Ultra</div>
+                        <div class="metric-label">AI Quality Score</div>
+                        <div class="metric-value" id="qualityValue">9.7/10</div>
+                        <div class="metric-trend">Studio grade output</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Stereo Width</div>
+                        <div class="metric-value" id="stereoValue">85%</div>
+                        <div class="metric-trend">Wide stereo field</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Emotional Impact</div>
+                        <div class="metric-value" id="emotionValue">8.9/10</div>
+                        <div class="metric-trend">Highly engaging</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Genre Confidence</div>
+                        <div class="metric-value" id="genreValue">94%</div>
+                        <div class="metric-trend">Electronic/Ambient</div>
                     </div>
                 </div>
             </div>
@@ -650,30 +841,125 @@
             });
         }
 
-        // Form handling
+        // Premium generation overlay functionality
+        function showGenerationOverlay() {
+            const overlay = document.querySelector('.generation-overlay');
+            if (!overlay) {
+                // Create overlay if it doesn't exist
+                const generationOverlay = document.createElement('div');
+                generationOverlay.className = 'generation-overlay';
+                generationOverlay.innerHTML = `
+                    <div class="premium-spinner">
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-center">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="generation-text">Creating Your Premium Track</div>
+                    <div class="generation-subtitle">
+                        Synthara is analyzing your prompt and crafting a professional-quality composition with advanced AI algorithms
+                    </div>
+                    <div class="premium-features">
+                        <div class="premium-feature">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            Studio Quality
+                        </div>
+                        <div class="premium-feature">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            Advanced Analytics
+                        </div>
+                        <div class="premium-feature">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            AI Insights
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(generationOverlay);
+            }
+
+            document.querySelector('.generation-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideGenerationOverlay() {
+            const overlay = document.querySelector('.generation-overlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Form handling with premium spinner
         document.getElementById('studioForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const prompt = document.getElementById('prompt').value;
             if (!prompt.trim()) return;
 
-            // Simulate generation
+            // Show premium generation overlay
+            showGenerationOverlay();
+
+            // Update button state
             document.getElementById('generateBtn').textContent = 'Generating...';
             document.getElementById('waveformOverlay').textContent = 'Generating audio...';
 
             // Start spectrum animation
             const spectrumInterval = setInterval(animateSpectrum, 200);
 
+            // Simulate premium generation process (5 seconds for premium experience)
             setTimeout(() => {
+                // Hide overlay and redirect back
+                hideGenerationOverlay();
+
+                // Reset button
                 document.getElementById('generateBtn').innerHTML = `
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/>
                     </svg>
                     Generate Music
                 `;
-                document.getElementById('waveformOverlay').textContent = 'Audio generated successfully';
+                document.getElementById('waveformOverlay').textContent = 'Premium track generated successfully';
                 clearInterval(spectrumInterval);
-            }, 3000);
+
+                // Update analytics with new premium values
+                updatePremiumAnalytics();
+            }, 5000);
         });
+
+        // Update premium analytics after generation
+        function updatePremiumAnalytics() {
+            const metrics = {
+                pitch: Math.floor(Math.random() * 200 + 400) + 'Hz',
+                dynamic: (Math.random() * 10 + 15).toFixed(1) + 'dB',
+                tempo: (Math.random() * 40 + 100).toFixed(1),
+                harmony: (Math.random() * 2 + 8).toFixed(1) + '/10',
+                spectral: Math.floor(Math.random() * 20 + 80) + '%',
+                quality: (Math.random() * 0.5 + 9.5).toFixed(1) + '/10',
+                stereo: Math.floor(Math.random() * 20 + 75) + '%',
+                emotion: (Math.random() * 1 + 8.5).toFixed(1) + '/10',
+                genre: Math.floor(Math.random() * 10 + 90) + '%'
+            };
+
+            document.getElementById('pitchValue').textContent = metrics.pitch;
+            document.getElementById('intensityValue').textContent = metrics.dynamic;
+            document.getElementById('tempoValue').textContent = metrics.tempo;
+            document.getElementById('harmonyValue').textContent = metrics.harmony;
+            document.getElementById('energyValue').textContent = metrics.spectral;
+            document.getElementById('qualityValue').textContent = metrics.quality;
+            document.getElementById('stereoValue').textContent = metrics.stereo;
+            document.getElementById('emotionValue').textContent = metrics.emotion;
+            document.getElementById('genreValue').textContent = metrics.genre;
+        }
 
         // Initialize everything
         document.addEventListener('DOMContentLoaded', () => {
