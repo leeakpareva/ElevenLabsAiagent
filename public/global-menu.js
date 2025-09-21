@@ -93,12 +93,12 @@ function createAboutModal() {
                     <li>Collaborate with AI that understands artistic intent</li>
                 </ul>
 
-                <h3>Synthara - Creative AI Music Studio</h3>
+                <h3>Synthara - AI Music Agent</h3>
                 <p style="font-style: italic; color: var(--color-accent-primary); margin-bottom: 1rem;">
-                    "Where AI and Sound Become One."
+                    "Your Intelligent Creative Partner in Music."
                 </p>
-                <p>Synthara is our flagship creative AI music studio built for the next generation of artists, producers, and dreamers. It fuses the precision of artificial intelligence with the soul of human creativity—turning ideas into immersive soundscapes, beats, and melodies.</p>
-                <p>From real-time voice modulation to AI-driven composition and visual sound analysis, Synthara empowers creators to push past boundaries and discover new dimensions of music. Whether you're composing, experimenting, or collaborating, Synthara transforms inspiration into sound with elegance, speed, and limitless possibilities.</p>
+                <p>Synthara's AI Music Agent is our flagship intelligent assistant designed for the next generation of artists, producers, and dreamers. It combines the precision of artificial intelligence with the soul of human creativity—functioning as your personal music creation partner that understands your artistic vision.</p>
+                <p>The AI Music Agent goes beyond simple generation, offering intelligent conversation, adaptive learning, and contextual understanding of your creative needs. Whether you're seeking inspiration, refining compositions, or exploring new musical territories, the AI Music Agent provides personalized guidance and creates music that evolves with your artistic journey.</p>
 
                 <h3>Shaping Tomorrow's Soundscape</h3>
                 <p>We're not just creating music software – we're <span class="about-highlight">pioneering a new era</span> where human creativity and artificial intelligence dance together in perfect harmony. Every note generated, every melody crafted, and every composition born from NAVADA is a step toward a future where <strong>anyone can be a composer</strong>.</p>
