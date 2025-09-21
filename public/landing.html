@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: #000000;
+            background: #0a0a0a;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,11 +21,11 @@
         }
 
         [data-theme="light"] body {
-            background: #ffffff;
+            background: #0a0a0a;
         }
 
         [data-theme="dark"] body {
-            background: #000000;
+            background: #0a0a0a;
         }
 
         .spline-container {
@@ -41,11 +41,31 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background: #0a0a0a;
         }
 
         spline-viewer {
             width: 100%;
             height: 100%;
+            background: #0a0a0a;
+        }
+
+        .brand-text {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-family: var(--font-stack);
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            z-index: 1000;
+            transition: color 0.3s ease;
+        }
+
+        .brand-text:hover {
+            color: rgba(16, 163, 127, 0.8);
         }
 
 
@@ -124,6 +144,12 @@
 
         /* Enhanced mobile responsiveness */
         @media (max-width: 768px) {
+            .brand-text {
+                bottom: 1.5rem;
+                left: 1.5rem;
+                font-size: 0.75rem;
+            }
+
             .spline-container {
                 width: 80vw;
                 height: 60vh;
@@ -147,6 +173,13 @@
         }
 
         @media (max-width: 480px) {
+            .brand-text {
+                bottom: 1rem;
+                left: 1rem;
+                font-size: 0.7rem;
+                letter-spacing: 2px;
+            }
+
             .spline-container {
                 width: 85vw;
                 height: 50vh;
@@ -173,6 +206,9 @@
     <div class="spline-container">
         <spline-viewer url="https://prod.spline.design/rGBFiZaGKnmjjQu9/scene.splinecode"></spline-viewer>
     </div>
+
+    <!-- Brand Text -->
+    <div class="brand-text">NAVADA</div>
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
