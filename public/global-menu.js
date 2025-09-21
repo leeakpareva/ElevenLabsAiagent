@@ -39,7 +39,7 @@ function createBurgerMenu() {
                         <circle cx="6" cy="18" r="3"/>
                         <circle cx="18" cy="16" r="3"/>
                     </svg>
-                    Music Studio
+                    SYNTHARA
                 </a>
             </div>
             <div class="burger-menu-item">
@@ -49,7 +49,7 @@ function createBurgerMenu() {
                         <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                         <line x1="12" x2="12" y1="19" y2="22"/>
                     </svg>
-                    Voice Assistant
+                    Evoque
                 </a>
             </div>
         </div>
