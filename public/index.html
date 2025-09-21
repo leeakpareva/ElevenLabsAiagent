@@ -298,24 +298,211 @@
             margin: 0;
         }
 
-        /* Mobile optimizations */
+        /* Footer Styles */
+        .ai-footer {
+            padding: 1rem;
+            background: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border-primary);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+            position: relative;
+            z-index: 10;
+        }
+
+        .ai-footer p {
+            color: var(--color-text-secondary) !important;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Return Home Button Styling */
+        .ai-return-home {
+            background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary)) !important;
+            color: white !important;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+            box-shadow: 0 2px 8px rgba(16, 163, 127, 0.2);
+        }
+
+        .ai-return-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(16, 163, 127, 0.4);
+            background: linear-gradient(135deg, var(--color-accent-secondary), var(--color-accent-primary)) !important;
+        }
+
+        .ai-return-home svg {
+            margin-right: 0.5rem;
+        }
+
+        /* Enhanced Mobile optimizations */
         @media (max-width: 768px) {
+            .ai-nav {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .ai-nav-link {
+                font-size: 0.875rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .ai-theme-toggle {
+                margin-top: 0.5rem;
+            }
+
             .ai-chat-container {
                 padding: 1rem;
+                padding-bottom: 0; /* Remove bottom padding as input area has its own */
             }
 
             .ai-message-bubble {
                 max-width: 90%;
+                padding: 1rem;
+            }
+
+            .ai-message-content {
+                font-size: 0.9rem;
             }
 
             .ai-input-area {
                 padding: 1rem;
+                border-top: 1px solid var(--color-border-primary);
+                background: var(--color-bg-elevated);
+            }
+
+            .ai-input-group {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .ai-text-input {
+                order: 1;
+                font-size: 16px; /* Prevent zoom on iOS */
+                padding: 1rem;
+                border-radius: var(--radius-md);
+            }
+
+            .ai-voice-btn {
+                order: 2;
+                width: 100%;
+                height: 60px;
+                border-radius: var(--radius-md);
+                font-size: 1.1rem;
+            }
+
+            .ai-btn {
+                order: 3;
+                width: 100%;
+                height: 50px;
+                justify-content: center;
+                padding: 0 1.5rem;
             }
 
             .ai-settings {
                 flex-direction: column;
                 gap: 0.75rem;
                 padding: 0.75rem 0;
+                margin-top: 1rem;
+            }
+
+            .ai-checkbox-group {
+                justify-content: center;
+            }
+
+            .ai-status-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem;
+                text-align: center;
+            }
+
+            .ai-voice-orb-container {
+                width: 250px;
+                height: 250px;
+            }
+
+            .ai-voice-center {
+                width: 50px;
+                height: 50px;
+            }
+
+            .ai-voice-center svg {
+                width: 25px;
+                height: 25px;
+            }
+
+            .ai-recording-indicator {
+                top: 0.5rem;
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .ai-footer {
+                font-size: 0.7rem;
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ai-logo-text {
+                font-size: 1.25rem;
+            }
+
+            .ai-nav {
+                gap: 0.25rem;
+            }
+
+            .ai-nav-link {
+                font-size: 0.8rem;
+                padding: 0.375rem 0.75rem;
+            }
+
+            .ai-chat-container {
+                padding: 0.75rem;
+            }
+
+            .ai-message-bubble {
+                padding: 0.875rem;
+            }
+
+            .ai-text-input {
+                padding: 0.875rem;
+            }
+
+            .ai-voice-btn {
+                height: 55px;
+            }
+
+            .ai-btn {
+                height: 45px;
+                font-size: 0.9rem;
+            }
+
+            .ai-voice-orb-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .ai-gradient-orb.orb-1 {
+                width: 300px;
+                height: 300px;
+                top: -150px;
+                left: -150px;
+            }
+
+            .ai-gradient-orb.orb-2 {
+                width: 250px;
+                height: 250px;
+                bottom: -125px;
+                right: -125px;
+            }
+
+            .ai-gradient-orb.orb-3 {
+                width: 200px;
+                height: 200px;
+                right: -100px;
             }
         }
     </style>
@@ -352,7 +539,13 @@
                 <span class="ai-logo-text">NAVADA</span>
             </div>
             <nav class="ai-nav">
-                <a href="/" class="ai-nav-link active">Home</a>
+                <a href="/landing.html" class="ai-nav-link ai-return-home" title="Return to main menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    Home
+                </a>
                 <a href="/music" class="ai-nav-link">Music Studio</a>
                 <a href="/music-studio" class="ai-nav-link">Creative Studio</a>
                 <div class="ai-theme-toggle" id="themeToggle" title="Toggle dark/light mode">
@@ -532,6 +725,7 @@
         });
     </script>
     <script src="theme.js"></script>
+    <script src="global-menu.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

@@ -10,6 +10,42 @@
     <style>
         :root {
             /* Extended color palette */
+
+        /* Additional studio styles */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .studio-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .studio-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .studio-btn:active {
+            transform: translateY(0);
+        }
+
+        .studio-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Extended color palette */
             --color-gradient-teal: linear-gradient(135deg, #10a37f, #1a7f64);
             --color-gradient-purple: linear-gradient(135deg, #8b5cf6, #7c3aed);
             --color-gradient-sky: linear-gradient(135deg, #0ea5e9, #0284c7);
@@ -767,6 +803,157 @@
         .tooltip:hover::after {
             opacity: 1;
         }
+
+        /* Footer Styles */
+        .studio-footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            text-align: center;
+            background: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border-primary);
+        }
+
+        .studio-footer p {
+            margin: 0;
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Mobile Responsive Improvements */
+        @media (max-width: 768px) {
+            .studio-container {
+                padding: 1rem;
+            }
+
+            .studio-title {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .studio-subtitle {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .studio-header {
+                margin-bottom: 2rem;
+            }
+
+            /* Fix header navigation on mobile */
+            .studio-header > div[style*="display: flex"] {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+                align-items: center !important;
+            }
+
+            .studio-header .ai-theme-toggle {
+                margin-top: 0.5rem;
+            }
+
+            /* Grid responsive */
+            .studio-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .studio-panel {
+                padding: 1.5rem;
+            }
+
+            .panel-title {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+
+            /* Form adjustments */
+            .prompt-input {
+                min-height: 100px;
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .studio-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 1rem 1.5rem;
+            }
+
+            /* Audio player responsive */
+            .audio-player {
+                margin-top: 1.5rem !important;
+                padding: 1rem !important;
+            }
+
+            .player-header {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+                align-items: stretch !important;
+            }
+
+            /* Voice analyzer adjustments */
+            .voice-visualizer {
+                width: 200px;
+                height: 200px;
+            }
+
+            .voice-metrics {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            /* Chart adjustments */
+            .chart-bars {
+                padding: 0 1rem;
+            }
+
+            .chart-bar {
+                min-width: 40px;
+            }
+
+            /* Modal responsive */
+            .analysis-modal .modal-content {
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+                overflow-y: auto;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+
+            .modal-close {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .studio-container {
+                padding: 0.75rem;
+            }
+
+            .studio-title {
+                font-size: 1.75rem;
+            }
+
+            .studio-panel {
+                padding: 1rem;
+            }
+
+            .voice-visualizer {
+                width: 150px;
+                height: 150px;
+            }
+
+            .waveform-container {
+                height: 120px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -967,14 +1154,14 @@
                 Music Generation Controls
             </div>
 
-            <form id="musicForm">
+            <form id="studioForm">
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
                         Describe your music
                     </label>
                     <textarea
                         class="prompt-input"
-                        id="musicPrompt"
+                        id="prompt"
                         placeholder="Create an uplifting electronic track with ambient synths, deep bass, and ethereal vocals..."
                     ></textarea>
                 </div>
@@ -984,14 +1171,11 @@
                         <span style="color: var(--color-text-primary); font-weight: 500;">Duration</span>
                         <span style="color: var(--color-text-secondary);" id="durationValue">10 seconds</span>
                     </div>
-                    <div class="duration-slider" id="durationSlider">
-                        <div class="duration-track" id="durationTrack"></div>
-                        <div class="duration-thumb" id="durationThumb"></div>
-                    </div>
+                    <input type="range" id="duration" min="5000" max="30000" value="10000" step="1000" style="width: 100%; margin-top: 0.5rem;">
                 </div>
 
                 <div class="button-grid">
-                    <button type="button" class="studio-btn btn-generate" id="generateBtn">
+                    <button type="submit" class="studio-btn btn-generate" id="generateBtn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/>
                         </svg>
@@ -1027,20 +1211,37 @@
             </form>
         </div>
 
-        <!-- Audio Player (Hidden by default) -->
-        <div class="audio-player" id="audioPlayer">
-            <div class="player-controls">
-                <button class="play-button" id="playButton">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/>
+        <!-- Studio Audio Player -->
+        <div class="audio-player" id="audioPlayer" style="display: none; margin-top: 2rem; padding: 1.5rem; background: var(--color-bg-elevated); border: 1px solid var(--color-border-primary); border-radius: var(--radius-lg);">
+            <div class="player-header" style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: var(--color-text-primary); margin: 0;">Generated Track</h3>
+                <button id="downloadBtn" class="studio-btn" style="background: var(--color-accent-primary); color: white; padding: 0.5rem 1rem; border: none; border-radius: var(--radius-md); cursor: pointer;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
                     </svg>
+                    Download
                 </button>
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
             </div>
-            <audio id="audioElement" style="display: none;"></audio>
+            <audio id="studioAudio" controls style="width: 100%; height: 54px;"></audio>
+        </div>
+
+        <!-- Loading State -->
+        <div id="studioLoading" style="display: none; text-align: center; padding: 2rem; margin-top: 2rem;">
+            <div style="width: 40px; height: 40px; border: 3px solid var(--color-border-primary); border-top-color: var(--color-accent-primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+            <p style="color: var(--color-text-secondary);">Generating your music...</p>
+        </div>
+
+        <!-- Record Button for Live Analysis -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <button id="recordBtn" class="studio-btn" style="background: var(--color-accent-blue); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: var(--radius-md); cursor: pointer;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                </svg>
+                Start Live Analysis
+            </button>
         </div>
     </div>
 
@@ -1092,6 +1293,11 @@
             <p style="text-align: center; margin-top: 2rem; color: var(--color-text-secondary);">Generating your masterpiece...</p>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="studio-footer">
+        <p>Designed & Developed by Lee Akpareva MBA, MA</p>
+    </footer>
 
     <script>
         // Initialize waveform canvas
@@ -1288,5 +1494,7 @@
         animateWaveform();
     </script>
     <script src="theme.js"></script>
+    <script src="global-menu.js"></script>
+    <script src="music-studio.js"></script>
 </body>
 </html>

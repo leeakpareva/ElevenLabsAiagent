@@ -96,9 +96,50 @@
         }
 
         .music-feature:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+            box-shadow: 0 0 30px rgba(16, 163, 127, 0.6), var(--shadow-lg);
             border-color: var(--color-accent-primary);
+            background: var(--color-bg-elevated);
+            position: relative;
+        }
+
+        .music-feature:hover::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg,
+                var(--color-accent-primary),
+                var(--color-accent-blue),
+                var(--color-accent-primary));
+            background-size: 200% 200%;
+            border-radius: var(--radius-md);
+            z-index: -1;
+            animation: neonGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes neonGlow {
+            0%, 100% {
+                background-position: 0% 50%;
+                opacity: 0.8;
+            }
+            50% {
+                background-position: 100% 50%;
+                opacity: 1;
+            }
+        }
+
+        .music-feature:hover .music-feature-icon {
+            background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-blue));
+            color: white;
+            box-shadow: 0 0 20px rgba(16, 163, 127, 0.8);
+        }
+
+        .music-feature:hover .music-feature-title {
+            color: var(--color-accent-primary);
+            text-shadow: 0 0 10px rgba(16, 163, 127, 0.3);
         }
 
         .music-feature-icon {
@@ -662,6 +703,126 @@
         .music-plan-content::-webkit-scrollbar-thumb:hover {
             background: var(--color-text-tertiary);
         }
+
+        /* Footer Styles */
+        .music-footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            text-align: center;
+            background: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border-primary);
+        }
+
+        .music-footer p {
+            margin: 0;
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Enhanced Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .music-header {
+                padding: 0 1rem;
+            }
+
+            .music-header > div[style*="display: flex"] {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+                align-items: center !important;
+            }
+
+            .music-header .ai-theme-toggle {
+                margin-top: 0.5rem;
+            }
+
+            .music-features {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-top: 1.5rem;
+            }
+
+            .music-feature {
+                padding: 1.25rem;
+            }
+
+            .music-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+                margin: 1rem 0;
+            }
+
+            .music-tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .music-tab {
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .music-btn-group {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .music-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 1rem 1.5rem;
+            }
+
+            .music-textarea {
+                font-size: 16px; /* Prevent zoom on iOS */
+                min-height: 100px;
+            }
+
+            .music-input {
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+
+            .music-range-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.75rem;
+            }
+
+            .music-range-value {
+                text-align: center;
+                margin-top: 0;
+            }
+
+            .music-eq-bars {
+                height: 60px;
+                gap: 3px;
+            }
+
+            .music-eq-bar {
+                width: 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .music-container {
+                padding: 0.75rem;
+            }
+
+            .music-title {
+                font-size: 2rem;
+            }
+
+            .music-feature {
+                padding: 1rem;
+            }
+
+            .music-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .music-tab-content {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -869,6 +1030,26 @@
                         <span class="music-metadata-value" id="generation-time">Just now</span>
                     </div>
                 </div>
+                <div class="music-btn-group">
+                    <button id="simple-download-btn" class="music-btn music-btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download Track
+                    </button>
+                    <button id="simple-share-btn" class="music-btn music-btn-secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="18" cy="5" r="3"/>
+                            <circle cx="6" cy="12" r="3"/>
+                            <circle cx="18" cy="19" r="3"/>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                        Share
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -978,6 +1159,27 @@
                     <h3 class="music-plan-title">Composition Plan</h3>
                     <div id="detailed-plan-display" class="music-plan-content"></div>
                 </div>
+
+                <div class="music-btn-group">
+                    <button id="detailed-download-btn" class="music-btn music-btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download Track
+                    </button>
+                    <button id="detailed-share-btn" class="music-btn music-btn-secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="18" cy="5" r="3"/>
+                            <circle cx="6" cy="12" r="3"/>
+                            <circle cx="18" cy="19" r="3"/>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                        Share
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -1018,9 +1220,34 @@
                 <div class="music-player">
                     <audio id="from-plan-audio" controls></audio>
                 </div>
+                <div class="music-btn-group">
+                    <button id="from-plan-download-btn" class="music-btn music-btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download Track
+                    </button>
+                    <button id="from-plan-share-btn" class="music-btn music-btn-secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="18" cy="5" r="3"/>
+                            <circle cx="6" cy="12" r="3"/>
+                            <circle cx="18" cy="19" r="3"/>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                        Share
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="music-footer">
+        <p>Designed & Developed by Lee Akpareva MBA, MA</p>
+    </footer>
 
     <script src="theme.js"></script>
     <script>
@@ -1053,6 +1280,7 @@
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         });
     </script>
+    <script src="global-menu.js"></script>
     <script src="music.js"></script>
 </body>
 </html>

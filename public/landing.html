@@ -160,10 +160,212 @@
             z-index: 100;
         }
 
+        /* Scroll Down Button */
+        .scroll-down-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(16, 163, 127, 0.9);
+            border: 2px solid rgba(16, 163, 127, 0.3);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: all var(--transition-base);
+            animation: scrollPulse 2s ease-in-out infinite;
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-down-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-down-btn:hover {
+            transform: translateX(-50%) scale(1.1);
+            background: rgba(16, 163, 127, 1);
+            box-shadow: 0 0 30px rgba(16, 163, 127, 0.6);
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Enhanced mobile responsiveness */
         @media (max-width: 768px) {
             .landing-theme-toggle {
                 top: 1rem;
                 right: 1rem;
+            }
+
+            .ai-hero-title {
+                font-size: 3rem;
+            }
+
+            .ai-hero-subtitle {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .ai-hero-cta {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            .ai-choice-container {
+                padding: 1rem;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                overflow-y: auto;
+            }
+
+            .ai-choice-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                max-width: 350px;
+                margin: 0 auto;
+                padding: 1rem 0;
+            }
+
+            .ai-choice-card {
+                padding: 1.5rem 1rem;
+                min-height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .ai-choice-icon-wrapper {
+                margin-bottom: 1.5rem;
+            }
+
+            .ai-choice-title {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .ai-choice-description {
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+
+            .scroll-down-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 1.5rem;
+            }
+
+            .scroll-down-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ai-hero-title {
+                font-size: 2.5rem;
+                letter-spacing: 3px;
+            }
+
+            .ai-hero-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .ai-hero-cta {
+                padding: 0.875rem 1.75rem;
+                font-size: 0.95rem;
+            }
+
+            .ai-choice-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .ai-choice-title {
+                font-size: 1.25rem;
+            }
+
+            .ai-choice-description {
+                font-size: 0.875rem;
+            }
+
+            .scroll-down-btn {
+                width: 45px;
+                height: 45px;
+                bottom: 1rem;
+            }
+
+            .ai-choice-title {
+                font-size: 1.1rem;
+            }
+
+            .ai-choice-description {
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+        }
+
+        /* Page Scroll Indicator */
+        .page-scroll-indicator {
+            position: fixed;
+            left: 1rem;
+            top: 60%;
+            transform: translateY(-50%);
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+        }
+
+        .page-scroll-indicator.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(16, 163, 127, 0.3);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .scroll-dot.active {
+            background: var(--color-accent-primary);
+            transform: scale(1.5);
+        }
+
+        .scroll-dot:hover {
+            background: var(--color-accent-primary);
+        }
+
+        @media (max-width: 768px) {
+            .page-scroll-indicator {
+                left: 0.5rem;
+                top: 65%;
+            }
+
+            .scroll-dot {
+                width: 6px;
+                height: 6px;
             }
         }
     </style>
@@ -256,6 +458,19 @@
                 <p class="ai-choice-description">Generate and compose music with advanced AI algorithms</p>
             </div>
         </div>
+    </div>
+
+    <!-- Scroll Down Button -->
+    <button class="scroll-down-btn" id="scrollDownBtn" title="Scroll to choose experience">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+        </svg>
+    </button>
+
+    <!-- Page Scroll Indicator -->
+    <div class="page-scroll-indicator" id="pageScrollIndicator">
+        <div class="scroll-dot active" data-section="hero" title="Welcome"></div>
+        <div class="scroll-dot" data-section="choice" title="Choose Experience"></div>
     </div>
 
     <script>
@@ -394,5 +609,7 @@
         });
     </script>
     <script src="theme.js"></script>
+    <script src="global-menu.js"></script>
+    <script src="landing.js"></script>
 </body>
 </html>
