@@ -16,7 +16,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+            background: #000000;
             min-height: 100vh;
             overflow-x: hidden;
             overflow-y: auto;
@@ -25,15 +25,17 @@
         .music-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 0;
             min-height: auto;
             position: relative;
+            background: transparent;
         }
 
         .music-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 0;
             position: relative;
+            padding: 2rem 2rem 0 2rem;
         }
 
         .music-title {
@@ -912,69 +914,22 @@
     <div class="music-container">
         <div class="music-header">
             <h1 class="music-title">SYNTHARA</h1>
-            <p class="music-subtitle">AI-Powered Music Composition</p>
-
-            <!-- Feature Cards -->
-            <div class="music-features">
-                <div class="music-feature">
-                    <div class="music-feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18V5l12-2v13"/>
-                            <circle cx="6" cy="18" r="3"/>
-                            <circle cx="18" cy="16" r="3"/>
-                        </svg>
-                    </div>
-                    <div class="music-feature-title">AI Composition</div>
-                    <div class="music-feature-desc">Generate complete musical pieces with advanced AI algorithms</div>
-                </div>
-
-                <div class="music-feature">
-                    <div class="music-feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                            <line x1="12" x2="12" y1="19" y2="22"/>
-                        </svg>
-                    </div>
-                    <div class="music-feature-title">Voice Control</div>
-                    <div class="music-feature-desc">Direct your composition with natural voice commands</div>
-                </div>
-
-                <div class="music-feature">
-                    <div class="music-feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                        </svg>
-                    </div>
-                    <div class="music-feature-title">Smart Plans</div>
-                    <div class="music-feature-desc">Create detailed composition blueprints before generation</div>
-                </div>
-
-                <div class="music-feature">
-                    <div class="music-feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                        </svg>
-                    </div>
-                    <div class="music-feature-title">Real-time Processing</div>
-                    <div class="music-feature-desc">Experience lightning-fast music generation and editing</div>
-                </div>
-            </div>
         </div>
 
-        <div class="music-tabs">
-            <button class="music-tab active" onclick="switchTab('simple')">Simple Generate</button>
-            <button class="music-tab" onclick="switchTab('composition')">Composition Plan</button>
-            <button class="music-tab" onclick="switchTab('detailed')">Detailed Generate</button>
-            <button class="music-tab" onclick="switchTab('from-plan')">From Plan</button>
+        <!-- Spline Element -->
+        <div style="width: 100%; height: 80vh; margin: 0; padding: 0; border: none; background: transparent;">
+            <iframe
+                src='https://my.spline.design/blobs-lFeFBOwXpAAo4wa8oHwOxXVR/'
+                frameborder='0'
+                width='100%'
+                height='100%'
+                style="border: none; margin: 0; padding: 0; background: transparent; display: block;">
+            </iframe>
         </div>
 
-        <!-- Simple Generate Tab -->
-        <div id="simple-tab" class="music-tab-content active">
-            <h2 style="margin-bottom: 1.5rem;">Simple Music Generation</h2>
+        <!-- Simple Music Generation Section -->
+        <div style="margin-top: 3rem; padding: 0 2rem;">
+            <h2 style="margin-bottom: 1.5rem; text-align: center; font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, var(--color-text-primary), var(--color-accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Simple Music Generation</h2>
 
             <!-- Live Stats -->
             <div class="music-stats">
@@ -995,6 +950,7 @@
                     <div class="music-stat-label">AI Uptime</div>
                 </div>
             </div>
+
             <form id="simple-form">
                 <div class="music-form-group">
                     <label for="simple-prompt" class="music-label">Music Prompt</label>
@@ -1079,196 +1035,6 @@
                         Download Track
                     </button>
                     <button id="simple-share-btn" class="music-btn music-btn-secondary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="18" cy="5" r="3"/>
-                            <circle cx="6" cy="12" r="3"/>
-                            <circle cx="18" cy="19" r="3"/>
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                        </svg>
-                        Share
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Composition Plan Tab -->
-        <div id="composition-tab" class="music-tab-content">
-            <h2 style="margin-bottom: 1.5rem;">Create Composition Plan</h2>
-            <form id="composition-form">
-                <div class="music-form-group">
-                    <label for="composition-prompt" class="music-label">Music Prompt</label>
-                    <textarea id="composition-prompt" class="music-textarea"
-                        placeholder="Describe the music composition you want to plan..."
-                        required></textarea>
-                </div>
-
-                <div class="music-form-group">
-                    <label for="composition-duration" class="music-label">Duration</label>
-                    <div class="music-range-group">
-                        <input type="range" id="composition-duration" class="music-range"
-                            min="5000" max="30000" value="10000" step="1000">
-                        <span id="composition-duration-value" class="music-range-value">10s</span>
-                    </div>
-                </div>
-
-                <div class="music-btn-group">
-                    <button type="submit" class="music-btn music-btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                            <polyline points="10 9 9 9 8 9"/>
-                        </svg>
-                        Create Plan
-                    </button>
-                </div>
-            </form>
-
-            <div id="composition-loading" class="music-loading">
-                <div class="music-spinner"></div>
-                <p class="music-loading-text">Creating composition plan...</p>
-            </div>
-
-            <div id="composition-error" class="music-error"></div>
-
-            <div id="composition-result" class="music-result">
-                <div class="music-plan">
-                    <h3 class="music-plan-title">Composition Plan</h3>
-                    <div id="composition-plan-display" class="music-plan-content"></div>
-                    <div class="music-btn-group">
-                        <button id="use-plan-btn" class="music-btn music-btn-primary">Use This Plan</button>
-                        <button id="copy-plan-btn" class="music-btn music-btn-secondary">Copy Plan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Detailed Generate Tab -->
-        <div id="detailed-tab" class="music-tab-content">
-            <h2 style="margin-bottom: 1.5rem;">Detailed Music Generation</h2>
-            <form id="detailed-form">
-                <div class="music-form-group">
-                    <label for="detailed-prompt" class="music-label">Music Prompt</label>
-                    <textarea id="detailed-prompt" class="music-textarea"
-                        placeholder="Describe the music with detailed specifications..."
-                        required></textarea>
-                </div>
-
-                <div class="music-form-group">
-                    <label for="detailed-duration" class="music-label">Duration</label>
-                    <div class="music-range-group">
-                        <input type="range" id="detailed-duration" class="music-range"
-                            min="5000" max="30000" value="10000" step="1000">
-                        <span id="detailed-duration-value" class="music-range-value">10s</span>
-                    </div>
-                </div>
-
-                <div class="music-btn-group">
-                    <button type="submit" class="music-btn music-btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 18V5l12-2v13"/>
-                            <circle cx="6" cy="18" r="3"/>
-                            <circle cx="18" cy="16" r="3"/>
-                        </svg>
-                        Generate with Details
-                    </button>
-                </div>
-            </form>
-
-            <div id="detailed-loading" class="music-loading">
-                <div class="music-spinner"></div>
-                <p class="music-loading-text">Generating detailed composition...</p>
-            </div>
-
-            <div id="detailed-error" class="music-error"></div>
-
-            <div id="detailed-result" class="music-result">
-                <div class="music-player">
-                    <audio id="detailed-audio" controls></audio>
-                </div>
-
-                <div id="detailed-metadata" class="music-metadata">
-                    <h3 class="music-metadata-title">Track Metadata</h3>
-                    <div id="detailed-metadata-content"></div>
-                </div>
-
-                <div id="detailed-composition-plan" class="music-plan">
-                    <h3 class="music-plan-title">Composition Plan</h3>
-                    <div id="detailed-plan-display" class="music-plan-content"></div>
-                </div>
-
-                <div class="music-btn-group">
-                    <button id="detailed-download-btn" class="music-btn music-btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Download Track
-                    </button>
-                    <button id="detailed-share-btn" class="music-btn music-btn-secondary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="18" cy="5" r="3"/>
-                            <circle cx="6" cy="12" r="3"/>
-                            <circle cx="18" cy="19" r="3"/>
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                        </svg>
-                        Share
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- From Plan Tab -->
-        <div id="from-plan-tab" class="music-tab-content">
-            <h2 style="margin-bottom: 1.5rem;">Generate from Composition Plan</h2>
-            <form id="from-plan-form">
-                <div class="music-form-group">
-                    <label for="plan-input" class="music-label">Composition Plan (JSON)</label>
-                    <textarea id="plan-input" class="music-textarea"
-                        placeholder="Paste your composition plan JSON here..."
-                        style="min-height: 200px; font-family: 'Courier New', monospace;"
-                        required></textarea>
-                </div>
-
-                <div class="music-btn-group">
-                    <button type="submit" class="music-btn music-btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                        Generate from Plan
-                    </button>
-                    <button type="button" class="music-btn music-btn-secondary" onclick="loadSamplePlan()">
-                        Load Sample Plan
-                    </button>
-                </div>
-            </form>
-
-            <div id="from-plan-loading" class="music-loading">
-                <div class="music-spinner"></div>
-                <p class="music-loading-text">Generating music from plan...</p>
-            </div>
-
-            <div id="from-plan-error" class="music-error"></div>
-
-            <div id="from-plan-result" class="music-result">
-                <div class="music-player">
-                    <audio id="from-plan-audio" controls></audio>
-                </div>
-                <div class="music-btn-group">
-                    <button id="from-plan-download-btn" class="music-btn music-btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Download Track
-                    </button>
-                    <button id="from-plan-share-btn" class="music-btn music-btn-secondary">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="18" cy="5" r="3"/>
                             <circle cx="6" cy="12" r="3"/>
