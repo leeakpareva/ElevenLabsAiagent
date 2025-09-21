@@ -805,9 +805,6 @@
                 align-items: center !important;
             }
 
-            .music-header .ai-theme-toggle {
-                margin-top: 0.5rem;
-            }
 
             .music-features {
                 grid-template-columns: 1fr;
@@ -1033,33 +1030,14 @@
 
     <script src="theme.js"></script>
     <script>
-        // Theme management
+        // Theme management - Dark mode only
         function initTheme() {
-            const savedTheme = localStorage.getItem('navada-theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-            document.documentElement.setAttribute('data-theme', theme);
-        }
-
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('navada-theme', newTheme);
-
-            // Add smooth transition
-            document.documentElement.style.transition = 'all 0.3s ease';
-            setTimeout(() => {
-                document.documentElement.style.transition = '';
-            }, 300);
+            document.documentElement.setAttribute('data-theme', 'dark');
         }
 
         // Initialize theme when page loads
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         });
     </script>
     <script src="global-menu.js"></script>
