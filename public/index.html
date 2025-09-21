@@ -5,98 +5,533 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>NAVADA</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>NAVADA - Voice Assistant</title>
+    <link rel="stylesheet" href="openai-styles.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap');
-
         body {
             user-select: none;
             -webkit-user-select: none;
             -webkit-touch-callout: none;
             -webkit-tap-highlight-color: transparent;
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating Particles */
+        .ai-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .ai-particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 15s linear infinite;
+        }
+
+        .ai-particle.teal {
+            background: var(--color-accent-primary);
+        }
+
+        .ai-particle.blue {
+            background: var(--color-accent-blue);
+        }
+
+        .ai-particle.purple {
+            background: #8b5cf6;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0);
+            }
+            10% {
+                opacity: 0.6;
+                transform: translateY(80vh) translateX(20px) rotate(90deg) scale(1);
+            }
+            50% {
+                opacity: 0.3;
+                transform: translateY(40vh) translateX(-20px) rotate(180deg) scale(0.7);
+            }
+            90% {
+                opacity: 0.6;
+                transform: translateY(10vh) translateX(10px) rotate(270deg) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-10vh) translateX(0) rotate(360deg) scale(0);
+            }
+        }
+
+        /* Gradient Orbs */
+        .ai-gradient-orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: orbDrift 20s ease-in-out infinite;
+        }
+
+        .ai-gradient-orb.orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle at center,
+                rgba(16, 163, 127, 0.2) 0%,
+                rgba(16, 163, 127, 0.05) 50%,
+                transparent 100%);
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .ai-gradient-orb.orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at center,
+                rgba(0, 102, 204, 0.15) 0%,
+                rgba(0, 102, 204, 0.03) 50%,
+                transparent 100%);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -10s;
+        }
+
+        .ai-gradient-orb.orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle at center,
+                rgba(139, 92, 246, 0.1) 0%,
+                rgba(139, 92, 246, 0.02) 50%,
+                transparent 100%);
+            top: 50%;
+            right: -125px;
+            animation-delay: -5s;
+        }
+
+        @keyframes orbDrift {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+            50% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+            75% {
+                transform: translate(20px, 30px) scale(1.05);
+            }
+        }
+
+        .ai-container {
+            height: 100vh;
+            height: -webkit-fill-available;
+        }
+
+        /* Custom voice visualizer for active state */
+        .ai-voice-orb-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            display: none;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .ai-voice-orb-container.active {
+            display: block;
+        }
+
+        .ai-voice-orb-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-voice-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                rgba(16, 163, 127, 0.3) 0%,
+                rgba(16, 163, 127, 0.1) 50%,
+                transparent 100%);
+            animation: voiceCirclePulse 2s ease-in-out infinite;
+        }
+
+        .ai-voice-circle:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            animation-delay: 0s;
+        }
+
+        .ai-voice-circle:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            animation-delay: 0.3s;
+        }
+
+        .ai-voice-circle:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes voiceCirclePulse {
+            0%, 100% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        .ai-voice-center {
+            width: 60px;
+            height: 60px;
+            background: var(--color-accent-primary);
+            border-radius: 50%;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(16, 163, 127, 0.6);
+        }
+
+        .ai-voice-center svg {
+            width: 30px;
+            height: 30px;
+            color: white;
+        }
+
+        /* Recording indicator refinement */
+        .ai-recording-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--color-accent-tertiary);
+            border: 1px solid var(--color-accent-primary);
+            border-radius: var(--radius-full);
+            color: var(--color-accent-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+        }
+
+        .ai-recording-indicator.active {
+            display: flex;
+        }
+
+        .ai-recording-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent-primary);
+            border-radius: 50%;
+            animation: recordPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes recordPulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.5);
+            }
+        }
+
+        /* Message styling adjustments */
+        .ai-message-content {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .ai-message-content p {
+            color: inherit;
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Footer styling */
+        .ai-footer {
+            padding: 1rem;
+            background: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border-primary);
+            text-align: center;
+            font-size: 0.75rem;
+            color: #2e2e32;
+            font-weight: 500;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ai-footer p {
+            color: #2e2e32 !important;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .ai-chat-container {
+                padding: 1rem;
+            }
+
+            .ai-message-bubble {
+                max-width: 90%;
+            }
+
+            .ai-input-area {
+                padding: 1rem;
+            }
+
+            .ai-settings {
+                flex-direction: column;
+                gap: 0.75rem;
+                padding: 0.75rem 0;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <nav style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; margin-bottom: 1rem;">
-                <div>
-                    <h1 style="margin: 0;">NAVADA</h1>
-                    <p class="subtitle" style="margin: 0;">AI Voice Assistant</p>
-                </div>
-                <div class="nav-links" style="display: flex; gap: 1.5rem;">
-                    <a href="/" style="color: #ff3333; text-decoration: none; font-weight: 500;">Home</a>
-                    <a href="/elevenlabs" style="color: #ff3333; text-decoration: none; font-weight: 500;">ElevenLabs</a>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <!-- Floating Particles Background -->
+    <div class="ai-particles" id="particles"></div>
+    <div class="ai-gradient-orb orb-1"></div>
+    <div class="ai-gradient-orb orb-2"></div>
+    <div class="ai-gradient-orb orb-3"></div>
+
+    <div class="ai-container">
+        <header class="ai-header">
+            <div class="ai-logo">
+                <div class="ai-logo-mark">N</div>
+                <span class="ai-logo-text">NAVADA</span>
+            </div>
+            <nav class="ai-nav">
+                <a href="/" class="ai-nav-link active">Home</a>
+                <a href="/music" class="ai-nav-link">Music Studio</a>
+                <a href="/music-studio" class="ai-nav-link">Creative Studio</a>
+                <div class="ai-theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+                    <div class="ai-theme-toggle-slider">
+                        <svg class="ai-theme-toggle-icon ai-theme-toggle-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"/>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                        </svg>
+                        <svg class="ai-theme-toggle-icon ai-theme-toggle-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </div>
                 </div>
             </nav>
         </header>
 
-        <div class="chat-container">
-            <div id="chatMessages" class="chat-messages">
-                <div class="message ai-message">
-                    <div class="message-header">
-                        <span class="label">NAVADA</span>
-                        <span class="timestamp">--:--</span>
-                    </div>
-                    <div class="message-content">
-                        <p>Welcome to NAVADA. Hold the microphone button to speak, or type a message below.</p>
+        <div class="ai-recording-indicator" id="recordingIndicator">
+            <div class="ai-recording-dot"></div>
+            <span>Recording...</span>
+        </div>
+
+        <div class="ai-chat-container">
+            <div class="ai-chat-messages" id="chatMessages">
+                <div class="ai-message ai-message-assistant">
+                    <div class="ai-message-bubble">
+                        <div class="ai-message-header">
+                            <div class="ai-message-avatar">N</div>
+                            <span class="ai-message-time" id="welcomeTime">--:--</span>
+                        </div>
+                        <div class="ai-message-content">
+                            <p>Welcome to NAVADA. I'm your AI assistant, ready to help with voice or text conversations.</p>
+                            <p>Hold the microphone button to speak, or type a message below.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="controls">
-            <div class="input-group">
-                <input 
-                    type="text" 
-                    id="textInput" 
-                    placeholder="Type a message or use voice..."
-                    autocomplete="off"
-                >
-                <button id="sendBtn" class="btn btn-send" title="Send message">
-                    <span>Send</span>
-                </button>
-            </div>
-            
-            <div class="voice-controls">
-                <button id="micBtn" class="btn btn-mic" title="Start/Stop recording">
-                    <span class="mic-icon">🎤</span>
-                    <span class="mic-text">Hold to Talk</span>
-                </button>
-                <div id="recordingIndicator" class="recording-indicator hidden">
-                    <span class="pulse"></span>
-                    Recording...
+        <div class="ai-voice-orb-container" id="voiceVisualizer">
+            <div class="ai-voice-orb-inner">
+                <div class="ai-voice-circle"></div>
+                <div class="ai-voice-circle"></div>
+                <div class="ai-voice-circle"></div>
+                <div class="ai-voice-center">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    </svg>
                 </div>
             </div>
+        </div>
 
-            <div class="settings">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="autoSpeak" checked>
-                    <span>Auto-speak responses</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="continuousMode">
-                    <span>Continuous conversation</span>
-                </label>
+        <div class="ai-input-area">
+            <div class="ai-input-wrapper">
+                <div class="ai-input-group">
+                    <input
+                        type="text"
+                        class="ai-text-input"
+                        id="textInput"
+                        placeholder="Type a message..."
+                        autocomplete="off"
+                    >
+                    <button id="micBtn" class="ai-voice-btn" title="Hold to record">
+                        <svg class="ai-voice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" x2="12" y1="19" y2="22"/>
+                        </svg>
+                    </button>
+                    <button id="sendBtn" class="ai-btn ai-btn-primary" title="Send message">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="ai-settings">
+                    <div class="ai-checkbox-group">
+                        <input type="checkbox" class="ai-checkbox" id="autoSpeak" checked>
+                        <label for="autoSpeak" class="ai-checkbox-label">Auto-speak responses</label>
+                    </div>
+                    <div class="ai-checkbox-group">
+                        <input type="checkbox" class="ai-checkbox" id="continuousMode">
+                        <label for="continuousMode" class="ai-checkbox-label">Continuous conversation</label>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="status-bar">
-            <span id="status">Ready</span>
-            <button id="clearBtn" class="btn-clear">Clear Chat</button>
+        <div class="ai-status-bar">
+            <div class="ai-status-text">
+                <div class="ai-status-indicator"></div>
+                <span id="status">Ready</span>
+            </div>
+            <button id="clearBtn" class="ai-btn ai-btn-icon">
+                Clear Chat
+            </button>
         </div>
-        
-        <footer class="footer">
-            <p>Designed + Coded By Lee Akpareva MBA, MA</p>
+
+        <footer class="ai-footer">
+            <p>Designed & Developed by Lee Akpareva MBA, MA</p>
         </footer>
     </div>
 
+    <script>
+        // Set welcome time
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+        document.getElementById('welcomeTime').textContent = timeString;
+
+        // Create floating particles
+        function createFloatingParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 25;
+            const colors = ['teal', 'blue', 'purple'];
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = `ai-particle ${colors[Math.floor(Math.random() * colors.length)]}`;
+
+                // Random size (2-6px)
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+
+                // Random horizontal position
+                particle.style.left = Math.random() * 100 + '%';
+
+                // Random animation delay (0-15s)
+                particle.style.animationDelay = Math.random() * 15 + 's';
+
+                // Random animation duration (12-18s)
+                particle.style.animationDuration = (Math.random() * 6 + 12) + 's';
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Theme Toggle Functionality
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('navada-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('navada-theme', newTheme);
+
+            // Add smooth transition
+            document.documentElement.style.transition = 'all 0.3s ease';
+            setTimeout(() => {
+                document.documentElement.style.transition = '';
+            }, 300);
+        }
+
+        // Initialize particles when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            createFloatingParticles();
+            initializeTheme();
+
+            // Add theme toggle listener
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+        });
+    </script>
+    <script src="theme.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

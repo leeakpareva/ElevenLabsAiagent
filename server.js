@@ -31,6 +31,20 @@ app.get('/elevenlabs', (req, res) => {
     res.sendFile(elevenLabsPath);
 });
 
+// Serve the Music Studio page
+app.get('/music', (req, res) => {
+    const musicPath = path.join(__dirname, 'public', 'music.html');
+    console.log('Serving Music Studio page from:', musicPath);
+    res.sendFile(musicPath);
+});
+
+// Serve the Creative Music Studio page
+app.get('/music-studio', (req, res) => {
+    const musicStudioPath = path.join(__dirname, 'public', 'music-studio.html');
+    console.log('Serving Creative Music Studio page from:', musicStudioPath);
+    res.sendFile(musicStudioPath);
+});
+
 // Serve static files (after route handlers)
 app.use(express.static('public'));
 
@@ -154,6 +168,141 @@ app.post('/api/tts', async (req, res) => {
     }
 });
 
+// Create composition plan
+app.post('/api/music/composition-plan', async (req, res) => {
+    try {
+        const { prompt, duration = 10000 } = req.body;
+
+        if (!prompt) {
+            return res.status(400).json({ error: 'Music prompt is required' });
+        }
+
+        console.log('Creating composition plan with prompt:', prompt);
+
+        const compositionPlan = await elevenlabs.music.compositionPlan.create({
+            prompt: prompt,
+            music_length_ms: duration,
+        });
+
+        res.json({
+            compositionPlan,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Composition Plan Creation Error:', error);
+        res.status(500).json({ error: 'Failed to create composition plan' });
+    }
+});
+
+// Generate music with detailed composition data
+app.post('/api/music/detailed', async (req, res) => {
+    try {
+        const { prompt, duration = 10000 } = req.body;
+
+        if (!prompt) {
+            return res.status(400).json({ error: 'Music prompt is required' });
+        }
+
+        console.log('Generating detailed music composition with prompt:', prompt);
+
+        const trackDetails = await elevenlabs.music.composeDetailed({
+            prompt: prompt,
+            music_length_ms: duration,
+        });
+
+        // Convert the audio to buffer for sending
+        const chunks = [];
+        for await (const chunk of trackDetails.audio) {
+            chunks.push(chunk);
+        }
+
+        const audioBuffer = Buffer.concat(chunks);
+
+        // Return both audio and metadata
+        res.json({
+            compositionPlan: trackDetails.json?.composition_plan,
+            songMetadata: trackDetails.json?.song_metadata,
+            filename: trackDetails.filename,
+            audioBase64: audioBuffer.toString('base64'),
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Detailed Music Generation Error:', error);
+        res.status(500).json({ error: 'Failed to generate detailed music composition' });
+    }
+});
+
+// Generate music from existing composition plan
+app.post('/api/music/from-plan', async (req, res) => {
+    try {
+        const { compositionPlan } = req.body;
+
+        if (!compositionPlan) {
+            return res.status(400).json({ error: 'Composition plan is required' });
+        }
+
+        console.log('Generating music from composition plan');
+
+        const track = await elevenlabs.music.compose({
+            composition_plan: compositionPlan,
+        });
+
+        // Convert the track to buffer for sending
+        const chunks = [];
+        for await (const chunk of track) {
+            chunks.push(chunk);
+        }
+
+        const audioBuffer = Buffer.concat(chunks);
+
+        res.set({
+            'Content-Type': 'audio/mpeg',
+            'Content-Length': audioBuffer.length,
+        });
+
+        res.send(audioBuffer);
+    } catch (error) {
+        console.error('Music Generation from Plan Error:', error);
+        res.status(500).json({ error: 'Failed to generate music from composition plan' });
+    }
+});
+
+// Generate music using ElevenLabs Music API (original endpoint)
+app.post('/api/music', async (req, res) => {
+    try {
+        const { prompt, duration = 10000 } = req.body;
+
+        if (!prompt) {
+            return res.status(400).json({ error: 'Music prompt is required' });
+        }
+
+        console.log('Generating music with prompt:', prompt);
+
+        const track = await elevenlabs.music.compose({
+            prompt: prompt,
+            music_length_ms: duration,
+        });
+
+        // Convert the track to buffer for sending
+        const chunks = [];
+        for await (const chunk of track) {
+            chunks.push(chunk);
+        }
+
+        const audioBuffer = Buffer.concat(chunks);
+
+        res.set({
+            'Content-Type': 'audio/mpeg',
+            'Content-Length': audioBuffer.length,
+        });
+
+        res.send(audioBuffer);
+    } catch (error) {
+        console.error('Music Generation Error:', error);
+        res.status(500).json({ error: 'Failed to generate music' });
+    }
+});
+
 // Process user message and generate response
 app.post('/api/chat', async (req, res) => {
     try {
@@ -189,8 +338,9 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Voice AI Agent server running at http://localhost:${PORT}`);
+const PORT = process.env.PORT || 0; // Use 0 to let system assign available port
+const server = app.listen(PORT, () => {
+    const actualPort = server.address().port;
+    console.log(`Voice AI Agent server running at http://localhost:${actualPort}`);
     console.log('Open your browser and navigate to the URL above to start using the voice agent!');
 });

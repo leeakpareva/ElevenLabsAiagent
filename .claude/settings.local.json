@@ -4,7 +4,11 @@
       "Bash(findstr:*)",
       "Bash(taskkill:*)",
       "Bash(dir:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(npm run dev:*)",
+      "Bash(cat:*)",
+      "Bash(curl:*)",
+      "Bash(node server.js)"
     ],
     "deny": [],
     "ask": []

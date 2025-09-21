@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>NAVADA Music Studio</title>
+    <link rel="stylesheet" href="openai-styles.css">
+    <style>
+        /* Override the base CSS to enable scrolling */
+        html, body {
+            height: auto !important;
+            min-height: 100vh;
+            overflow: visible !important;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .music-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: auto;
+            position: relative;
+        }
+
+        .music-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .music-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--color-text-primary), var(--color-accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .music-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-blue));
+            border-radius: var(--radius-full);
+            animation: titleUnderline 1s ease-out 0.5s both;
+        }
+
+        @keyframes titleUnderline {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 100px;
+                opacity: 1;
+            }
+        }
+
+        .music-subtitle {
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .music-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .music-feature {
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all var(--transition-base);
+        }
+
+        .music-feature:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-accent-primary);
+        }
+
+        .music-feature-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            background: var(--color-accent-tertiary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-accent-primary);
+        }
+
+        .music-feature-title {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .music-feature-desc {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Tab Navigation */
+        .music-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem;
+            background: var(--color-bg-elevated);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border-primary);
+        }
+
+        .music-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .music-tab:hover {
+            background: var(--color-surface-hover);
+        }
+
+        .music-tab.active {
+            background: var(--color-bg-primary);
+            color: var(--color-accent-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Tab Content */
+        .music-tab-content {
+            display: none;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .music-tab-content.active {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form Styles */
+        .music-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .music-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .music-textarea,
+        .music-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--color-bg-primary);
+            border: 2px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all var(--transition-base);
+            resize: vertical;
+        }
+
+        .music-textarea {
+            min-height: 120px;
+        }
+
+        .music-textarea:focus,
+        .music-input:focus {
+            outline: none;
+            border-color: var(--color-accent-primary);
+            box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+        }
+
+        /* Range Slider */
+        .music-range-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .music-range {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: var(--color-border-primary);
+            border-radius: var(--radius-full);
+            outline: none;
+            transition: background var(--transition-base);
+        }
+
+        .music-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--color-accent-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .music-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: var(--shadow-md);
+        }
+
+        .music-range-value {
+            min-width: 60px;
+            text-align: center;
+            padding: 0.5rem;
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .music-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .music-btn-primary {
+            background: var(--color-accent-primary);
+            color: white;
+        }
+
+        .music-btn-primary:hover {
+            background: var(--color-accent-secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .music-btn-secondary {
+            background: var(--color-bg-tertiary);
+            color: var(--color-text-primary);
+        }
+
+        .music-btn-secondary:hover {
+            background: var(--color-border-primary);
+        }
+
+        .music-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading State */
+        .music-loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .music-loading.active {
+            display: flex;
+        }
+
+        .music-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--color-border-primary);
+            border-top-color: var(--color-accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .music-loading-text {
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Results Section */
+        .music-result {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .music-result.active {
+            display: block;
+        }
+
+        /* Audio Player */
+        .music-player {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .music-player audio {
+            width: 100%;
+            height: 54px;
+            border-radius: var(--radius-md);
+        }
+
+        /* Metadata Display */
+        .music-metadata {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .music-metadata-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .music-metadata-item {
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border-secondary);
+        }
+
+        .music-metadata-item:last-child {
+            border-bottom: none;
+        }
+
+        .music-metadata-label {
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            min-width: 120px;
+        }
+
+        .music-metadata-value {
+            color: var(--color-text-primary);
+            flex: 1;
+        }
+
+        /* Composition Plan Display */
+        .music-plan {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+
+        .music-plan-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .music-plan-content {
+            background: var(--color-bg-primary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Section Cards */
+        .music-section-card {
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all var(--transition-base);
+        }
+
+        .music-section-card:hover {
+            box-shadow: var(--shadow-sm);
+            border-color: var(--color-accent-primary);
+        }
+
+        /* Interactive Elements */
+        .music-waveform {
+            width: 100%;
+            height: 60px;
+            background: var(--color-bg-primary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .music-waveform::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -100%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-accent-primary), transparent);
+            animation: waveformScan 3s linear infinite;
+        }
+
+        @keyframes waveformScan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .music-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--color-border-primary);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .music-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-blue));
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .music-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .music-stat {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .music-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-accent-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .music-stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .music-visualization {
+            background: var(--color-bg-primary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .music-eq-bars {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            gap: 4px;
+            height: 80px;
+            margin: 1rem 0;
+        }
+
+        .music-eq-bar {
+            width: 8px;
+            background: var(--color-accent-primary);
+            border-radius: var(--radius-xs);
+            animation: eqBounce 1.5s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .music-eq-bar:nth-child(1) { height: 20%; animation-delay: 0s; }
+        .music-eq-bar:nth-child(2) { height: 40%; animation-delay: 0.1s; }
+        .music-eq-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+        .music-eq-bar:nth-child(4) { height: 80%; animation-delay: 0.3s; }
+        .music-eq-bar:nth-child(5) { height: 50%; animation-delay: 0.4s; }
+        .music-eq-bar:nth-child(6) { height: 70%; animation-delay: 0.5s; }
+        .music-eq-bar:nth-child(7) { height: 30%; animation-delay: 0.6s; }
+        .music-eq-bar:nth-child(8) { height: 90%; animation-delay: 0.7s; }
+
+        @keyframes eqBounce {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1); }
+        }
+
+        .music-section-name {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .music-section-duration {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .music-styles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .music-style-tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--color-accent-tertiary);
+            color: var(--color-accent-primary);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Button Group */
+        .music-btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        /* Error State */
+        .music-error {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            color: rgb(239, 68, 68);
+            margin-top: 1rem;
+        }
+
+        .music-error.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .music-container {
+                padding: 1rem;
+            }
+
+            .music-title {
+                font-size: 2rem;
+            }
+
+            .music-tabs {
+                flex-direction: column;
+            }
+
+            .music-tab {
+                width: 100%;
+            }
+
+            .music-btn-group {
+                flex-direction: column;
+            }
+
+            .music-range-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .music-range-value {
+                text-align: center;
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* Custom scrollbar for plan content */
+        .music-plan-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .music-plan-content::-webkit-scrollbar-track {
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-xs);
+        }
+
+        .music-plan-content::-webkit-scrollbar-thumb {
+            background: var(--color-border-primary);
+            border-radius: var(--radius-xs);
+        }
+
+        .music-plan-content::-webkit-scrollbar-thumb:hover {
+            background: var(--color-text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="music-container">
+        <div class="music-header">
+            <h1 class="music-title">NAVADA MUSIC STUDIO</h1>
+            <p class="music-subtitle">AI-Powered Music Composition</p>
+
+            <!-- Feature Cards -->
+            <div class="music-features">
+                <div class="music-feature">
+                    <div class="music-feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="music-feature-title">AI Composition</div>
+                    <div class="music-feature-desc">Generate complete musical pieces with advanced AI algorithms</div>
+                </div>
+
+                <div class="music-feature">
+                    <div class="music-feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" x2="12" y1="19" y2="22"/>
+                        </svg>
+                    </div>
+                    <div class="music-feature-title">Voice Control</div>
+                    <div class="music-feature-desc">Direct your composition with natural voice commands</div>
+                </div>
+
+                <div class="music-feature">
+                    <div class="music-feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <div class="music-feature-title">Smart Plans</div>
+                    <div class="music-feature-desc">Create detailed composition blueprints before generation</div>
+                </div>
+
+                <div class="music-feature">
+                    <div class="music-feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <div class="music-feature-title">Real-time Processing</div>
+                    <div class="music-feature-desc">Experience lightning-fast music generation and editing</div>
+                </div>
+            </div>
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+                <a href="/music-studio" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--color-gradient-teal); background-image: linear-gradient(135deg, #10a37f, #1a7f64); color: white; border-radius: var(--radius-md); text-decoration: none; font-weight: 500; transition: all var(--transition-base);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    Try Creative Studio
+                </a>
+                <a href="/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--color-bg-tertiary); color: var(--color-text-primary); border: 2px solid var(--color-border-primary); border-radius: var(--radius-md); text-decoration: none; font-weight: 500; transition: all var(--transition-base);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    Home
+                </a>
+                <div class="ai-theme-toggle" id="themeToggle" title="Toggle dark/light mode">
+                    <div class="ai-theme-toggle-slider">
+                        <svg class="ai-theme-toggle-icon ai-theme-toggle-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"/>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                        </svg>
+                        <svg class="ai-theme-toggle-icon ai-theme-toggle-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="music-tabs">
+            <button class="music-tab active" onclick="switchTab('simple')">Simple Generate</button>
+            <button class="music-tab" onclick="switchTab('composition')">Composition Plan</button>
+            <button class="music-tab" onclick="switchTab('detailed')">Detailed Generate</button>
+            <button class="music-tab" onclick="switchTab('from-plan')">From Plan</button>
+        </div>
+
+        <!-- Simple Generate Tab -->
+        <div id="simple-tab" class="music-tab-content active">
+            <h2 style="margin-bottom: 1.5rem;">Simple Music Generation</h2>
+
+            <!-- Live Stats -->
+            <div class="music-stats">
+                <div class="music-stat">
+                    <div class="music-stat-value">12.3k</div>
+                    <div class="music-stat-label">Tracks Generated</div>
+                </div>
+                <div class="music-stat">
+                    <div class="music-stat-value">4.7s</div>
+                    <div class="music-stat-label">Avg Generation</div>
+                </div>
+                <div class="music-stat">
+                    <div class="music-stat-value">98%</div>
+                    <div class="music-stat-label">Quality Score</div>
+                </div>
+                <div class="music-stat">
+                    <div class="music-stat-value">24/7</div>
+                    <div class="music-stat-label">AI Uptime</div>
+                </div>
+            </div>
+            <form id="simple-form">
+                <div class="music-form-group">
+                    <label for="simple-prompt" class="music-label">Music Prompt</label>
+                    <textarea id="simple-prompt" class="music-textarea"
+                        placeholder="Describe the music you want to create..."
+                        required></textarea>
+                </div>
+
+                <div class="music-form-group">
+                    <label for="simple-duration" class="music-label">Duration</label>
+                    <div class="music-range-group">
+                        <input type="range" id="simple-duration" class="music-range"
+                            min="5000" max="30000" value="10000" step="1000">
+                        <span id="simple-duration-value" class="music-range-value">10s</span>
+                    </div>
+                </div>
+
+                <div class="music-btn-group">
+                    <button type="submit" class="music-btn music-btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        Generate Music
+                    </button>
+                </div>
+            </form>
+
+            <div id="simple-loading" class="music-loading">
+                <div class="music-spinner"></div>
+                <p class="music-loading-text">Generating your music...</p>
+                <div class="music-progress">
+                    <div class="music-progress-bar" id="simple-progress"></div>
+                </div>
+                <div class="music-visualization">
+                    <div class="music-eq-bars">
+                        <div class="music-eq-bar"></div>
+                        <div class="music-eq-bar"></div>
+                        <div class="music-eq-bar"></div>
+                        <div class="music-eq-bar"></div>
+                        <div class="music-eq-bar"></div>
+                        <div class="music-eq-bar"></div>
+                        <div class="music-eq-bar"></div>
+                        <div class="music-eq-bar"></div>
+                    </div>
+                    <p style="color: var(--color-text-secondary); font-size: 0.9rem;">AI is analyzing your prompt and crafting the perfect composition...</p>
+                </div>
+            </div>
+
+            <div id="simple-error" class="music-error"></div>
+
+            <div id="simple-result" class="music-result">
+                <div class="music-waveform"></div>
+                <div class="music-player">
+                    <audio id="simple-audio" controls></audio>
+                </div>
+                <div class="music-metadata">
+                    <h3 class="music-metadata-title">Generated Track Info</h3>
+                    <div class="music-metadata-item">
+                        <span class="music-metadata-label">Duration:</span>
+                        <span class="music-metadata-value">10.0 seconds</span>
+                    </div>
+                    <div class="music-metadata-item">
+                        <span class="music-metadata-label">Format:</span>
+                        <span class="music-metadata-value">MP3, 320kbps</span>
+                    </div>
+                    <div class="music-metadata-item">
+                        <span class="music-metadata-label">AI Model:</span>
+                        <span class="music-metadata-value">NAVADA-v2.1</span>
+                    </div>
+                    <div class="music-metadata-item">
+                        <span class="music-metadata-label">Generated:</span>
+                        <span class="music-metadata-value" id="generation-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Composition Plan Tab -->
+        <div id="composition-tab" class="music-tab-content">
+            <h2 style="margin-bottom: 1.5rem;">Create Composition Plan</h2>
+            <form id="composition-form">
+                <div class="music-form-group">
+                    <label for="composition-prompt" class="music-label">Music Prompt</label>
+                    <textarea id="composition-prompt" class="music-textarea"
+                        placeholder="Describe the music composition you want to plan..."
+                        required></textarea>
+                </div>
+
+                <div class="music-form-group">
+                    <label for="composition-duration" class="music-label">Duration</label>
+                    <div class="music-range-group">
+                        <input type="range" id="composition-duration" class="music-range"
+                            min="5000" max="30000" value="10000" step="1000">
+                        <span id="composition-duration-value" class="music-range-value">10s</span>
+                    </div>
+                </div>
+
+                <div class="music-btn-group">
+                    <button type="submit" class="music-btn music-btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                        Create Plan
+                    </button>
+                </div>
+            </form>
+
+            <div id="composition-loading" class="music-loading">
+                <div class="music-spinner"></div>
+                <p class="music-loading-text">Creating composition plan...</p>
+            </div>
+
+            <div id="composition-error" class="music-error"></div>
+
+            <div id="composition-result" class="music-result">
+                <div class="music-plan">
+                    <h3 class="music-plan-title">Composition Plan</h3>
+                    <div id="composition-plan-display" class="music-plan-content"></div>
+                    <div class="music-btn-group">
+                        <button id="use-plan-btn" class="music-btn music-btn-primary">Use This Plan</button>
+                        <button id="copy-plan-btn" class="music-btn music-btn-secondary">Copy Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Generate Tab -->
+        <div id="detailed-tab" class="music-tab-content">
+            <h2 style="margin-bottom: 1.5rem;">Detailed Music Generation</h2>
+            <form id="detailed-form">
+                <div class="music-form-group">
+                    <label for="detailed-prompt" class="music-label">Music Prompt</label>
+                    <textarea id="detailed-prompt" class="music-textarea"
+                        placeholder="Describe the music with detailed specifications..."
+                        required></textarea>
+                </div>
+
+                <div class="music-form-group">
+                    <label for="detailed-duration" class="music-label">Duration</label>
+                    <div class="music-range-group">
+                        <input type="range" id="detailed-duration" class="music-range"
+                            min="5000" max="30000" value="10000" step="1000">
+                        <span id="detailed-duration-value" class="music-range-value">10s</span>
+                    </div>
+                </div>
+
+                <div class="music-btn-group">
+                    <button type="submit" class="music-btn music-btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                        </svg>
+                        Generate with Details
+                    </button>
+                </div>
+            </form>
+
+            <div id="detailed-loading" class="music-loading">
+                <div class="music-spinner"></div>
+                <p class="music-loading-text">Generating detailed composition...</p>
+            </div>
+
+            <div id="detailed-error" class="music-error"></div>
+
+            <div id="detailed-result" class="music-result">
+                <div class="music-player">
+                    <audio id="detailed-audio" controls></audio>
+                </div>
+
+                <div id="detailed-metadata" class="music-metadata">
+                    <h3 class="music-metadata-title">Track Metadata</h3>
+                    <div id="detailed-metadata-content"></div>
+                </div>
+
+                <div id="detailed-composition-plan" class="music-plan">
+                    <h3 class="music-plan-title">Composition Plan</h3>
+                    <div id="detailed-plan-display" class="music-plan-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- From Plan Tab -->
+        <div id="from-plan-tab" class="music-tab-content">
+            <h2 style="margin-bottom: 1.5rem;">Generate from Composition Plan</h2>
+            <form id="from-plan-form">
+                <div class="music-form-group">
+                    <label for="plan-input" class="music-label">Composition Plan (JSON)</label>
+                    <textarea id="plan-input" class="music-textarea"
+                        placeholder="Paste your composition plan JSON here..."
+                        style="min-height: 200px; font-family: 'Courier New', monospace;"
+                        required></textarea>
+                </div>
+
+                <div class="music-btn-group">
+                    <button type="submit" class="music-btn music-btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Generate from Plan
+                    </button>
+                    <button type="button" class="music-btn music-btn-secondary" onclick="loadSamplePlan()">
+                        Load Sample Plan
+                    </button>
+                </div>
+            </form>
+
+            <div id="from-plan-loading" class="music-loading">
+                <div class="music-spinner"></div>
+                <p class="music-loading-text">Generating music from plan...</p>
+            </div>
+
+            <div id="from-plan-error" class="music-error"></div>
+
+            <div id="from-plan-result" class="music-result">
+                <div class="music-player">
+                    <audio id="from-plan-audio" controls></audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="theme.js"></script>
+    <script>
+        // Theme management
+        function initTheme() {
+            const savedTheme = localStorage.getItem('navada-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('navada-theme', newTheme);
+
+            // Add smooth transition
+            document.documentElement.style.transition = 'all 0.3s ease';
+            setTimeout(() => {
+                document.documentElement.style.transition = '';
+            }, 300);
+        }
+
+        // Initialize theme when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        });
+    </script>
+    <script src="music.js"></script>
+</body>
+</html>
