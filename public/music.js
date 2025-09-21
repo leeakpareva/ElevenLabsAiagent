@@ -146,13 +146,32 @@ async function handleCompositionPlan(event) {
 async function handleDetailedGenerate(event) {
     event.preventDefault();
 
-    const prompt = document.getElementById('detailed-prompt').value;
-    const duration = parseInt(document.getElementById('detailed-duration').value);
+    console.log('Detailed generate button clicked');
+
+    const promptElement = document.getElementById('detailed-prompt');
+    const durationElement = document.getElementById('detailed-duration');
+
+    if (!promptElement || !durationElement) {
+        console.error('Form elements not found');
+        return;
+    }
+
+    const prompt = promptElement.value;
+    const duration = parseInt(durationElement.value);
+
+    console.log('Prompt:', prompt, 'Duration:', duration);
+
+    if (!prompt.trim()) {
+        alert('Please enter a music prompt');
+        return;
+    }
 
     try {
         showLoading('detailed');
         hideError('detailed');
         hideResult('detailed');
+
+        console.log('Sending request to /api/music/detailed');
 
         const response = await fetch('/api/music/detailed', {
             method: 'POST',
@@ -162,8 +181,11 @@ async function handleDetailedGenerate(event) {
             body: JSON.stringify({ prompt, duration }),
         });
 
+        console.log('Response status:', response.status);
+
         if (!response.ok) {
             const errorData = await response.json();
+            console.error('Server error:', errorData);
             throw new Error(errorData.error || 'Failed to generate detailed music');
         }
 
@@ -457,11 +479,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Utility functions
 function showLoading(section) {
-    document.getElementById(section + '-loading').classList.add('active');
+    // Show the global lucid spinner
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Also show section-specific loading if it exists
+    const sectionLoading = document.getElementById(section + '-loading');
+    if (sectionLoading) {
+        sectionLoading.classList.add('active');
+    }
 }
 
 function hideLoading(section) {
-    document.getElementById(section + '-loading').classList.remove('active');
+    // Hide the global lucid spinner
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Also hide section-specific loading if it exists
+    const sectionLoading = document.getElementById(section + '-loading');
+    if (sectionLoading) {
+        sectionLoading.classList.remove('active');
+    }
 }
 
 function showError(section, message) {

@@ -207,7 +207,9 @@ app.post('/api/music/detailed', async (req, res) => {
         // Convert the audio to buffer for sending
         const chunks = [];
         for await (const chunk of trackDetails.audio) {
-            chunks.push(chunk);
+            // Ensure chunk is a Buffer
+            const bufferChunk = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+            chunks.push(bufferChunk);
         }
 
         const audioBuffer = Buffer.concat(chunks);
@@ -222,6 +224,15 @@ app.post('/api/music/detailed', async (req, res) => {
         });
     } catch (error) {
         console.error('Detailed Music Generation Error:', error);
+
+        // Handle quota exceeded error specifically
+        if (error.statusCode === 401 && error.body?.detail?.status === 'quota_exceeded') {
+            return res.status(401).json({
+                error: 'ElevenLabs quota exceeded. Please check your account credits.',
+                details: error.body.detail.message
+            });
+        }
+
         res.status(500).json({ error: 'Failed to generate detailed music composition' });
     }
 });
@@ -244,7 +255,9 @@ app.post('/api/music/from-plan', async (req, res) => {
         // Convert the track to buffer for sending
         const chunks = [];
         for await (const chunk of track) {
-            chunks.push(chunk);
+            // Ensure chunk is a Buffer
+            const bufferChunk = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+            chunks.push(bufferChunk);
         }
 
         const audioBuffer = Buffer.concat(chunks);
@@ -280,7 +293,9 @@ app.post('/api/music', async (req, res) => {
         // Convert the track to buffer for sending
         const chunks = [];
         for await (const chunk of track) {
-            chunks.push(chunk);
+            // Ensure chunk is a Buffer
+            const bufferChunk = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+            chunks.push(bufferChunk);
         }
 
         const audioBuffer = Buffer.concat(chunks);
@@ -293,6 +308,15 @@ app.post('/api/music', async (req, res) => {
         res.send(audioBuffer);
     } catch (error) {
         console.error('Music Generation Error:', error);
+
+        // Handle quota exceeded error specifically
+        if (error.statusCode === 401 && error.body?.detail?.status === 'quota_exceeded') {
+            return res.status(401).json({
+                error: 'ElevenLabs quota exceeded. Please check your account credits.',
+                details: error.body.detail.message
+            });
+        }
+
         res.status(500).json({ error: 'Failed to generate music' });
     }
 });

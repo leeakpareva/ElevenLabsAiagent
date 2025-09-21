@@ -652,8 +652,139 @@
             display: block;
         }
 
+        /* Back Arrow - Positioned under burger menu */
+        .back-arrow {
+            position: fixed;
+            top: 5rem;
+            left: 1rem;
+            z-index: 1000;
+            background: var(--color-bg-elevated);
+            border: 2px solid var(--color-border-primary);
+            border-radius: var(--radius-full);
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-md);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-arrow:hover {
+            border-color: var(--color-accent-primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .back-arrow svg {
+            width: 20px;
+            height: 20px;
+            color: var(--color-text-primary);
+            transition: all var(--transition-base);
+        }
+
+        .back-arrow:hover svg {
+            transform: translateX(-2px);
+        }
+
+        /* Lucid Loading Spinner */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lucid-spinner {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .spinner-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            animation: lucidSpin 2s linear infinite;
+        }
+
+        .spinner-ring:nth-child(1) {
+            border-top: 2px solid rgba(16, 163, 127, 0.8);
+            animation-duration: 1.5s;
+        }
+
+        .spinner-ring:nth-child(2) {
+            border-right: 2px solid rgba(139, 92, 246, 0.6);
+            animation-duration: 2s;
+            animation-direction: reverse;
+            transform: scale(0.8);
+        }
+
+        .spinner-ring:nth-child(3) {
+            border-bottom: 2px solid rgba(0, 102, 204, 0.4);
+            animation-duration: 2.5s;
+            transform: scale(0.6);
+        }
+
+        .spinner-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, var(--color-accent-primary), var(--color-accent-blue));
+            border-radius: 50%;
+            animation: lucidPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(16, 163, 127, 0.5);
+        }
+
+        @keyframes lucidSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes lucidPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.7;
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
+            .back-arrow {
+                top: 4rem;
+                left: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .back-arrow svg {
+                width: 18px;
+                height: 18px;
+            }
             .music-container {
                 padding: 1rem;
             }
@@ -812,6 +943,22 @@
     </style>
 </head>
 <body>
+    <!-- Back Arrow -->
+    <a href="/" class="back-arrow" title="Back to Home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+        </svg>
+    </a>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="lucid-spinner">
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <div class="spinner-inner"></div>
+        </div>
+    </div>
 
     <div class="music-container">
         <div class="music-header">
@@ -866,15 +1013,6 @@
                     <div class="music-feature-title">Real-time Processing</div>
                     <div class="music-feature-desc">Experience lightning-fast music generation and editing</div>
                 </div>
-            </div>
-            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;">
-                <a href="/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--color-bg-tertiary); color: var(--color-text-primary); border: 2px solid var(--color-border-primary); border-radius: var(--radius-md); text-decoration: none; font-weight: 500; transition: all var(--transition-base);">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                        <polyline points="9 22 9 12 15 12 15 22"/>
-                    </svg>
-                    Home
-                </a>
             </div>
         </div>
 
