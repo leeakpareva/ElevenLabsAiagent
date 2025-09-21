@@ -652,41 +652,6 @@
             display: block;
         }
 
-        /* Back Arrow - Positioned under burger menu */
-        .back-arrow {
-            position: fixed;
-            top: 5rem;
-            left: 1rem;
-            z-index: 1000;
-            background: var(--color-bg-elevated);
-            border: 2px solid var(--color-border-primary);
-            border-radius: var(--radius-full);
-            padding: 0.75rem;
-            cursor: pointer;
-            transition: all var(--transition-base);
-            box-shadow: var(--shadow-md);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .back-arrow:hover {
-            border-color: var(--color-accent-primary);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .back-arrow svg {
-            width: 20px;
-            height: 20px;
-            color: var(--color-text-primary);
-            transition: all var(--transition-base);
-        }
-
-        .back-arrow:hover svg {
-            transform: translateX(-2px);
-        }
 
         /* Lucid Loading Spinner */
         .loading-overlay {
@@ -775,16 +740,6 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .back-arrow {
-                top: 4rem;
-                left: 0.5rem;
-                padding: 0.5rem;
-            }
-
-            .back-arrow svg {
-                width: 18px;
-                height: 18px;
-            }
             .music-container {
                 padding: 1rem;
             }
@@ -943,12 +898,6 @@
     </style>
 </head>
 <body>
-    <!-- Back Arrow -->
-    <a href="/" class="back-arrow" title="Back to Home">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-        </svg>
-    </a>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
