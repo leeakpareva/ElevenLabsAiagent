@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="NAVADA">
     <title>NAVADA</title>
+    <link rel="stylesheet" href="openai-styles.css">
     <style>
         * {
             margin: 0;
@@ -83,12 +84,25 @@
             transform: translateX(-2px);
         }
 
+        /* Theme Toggle for ElevenLabs */
+        .elevenlabs-theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+        }
+
         @media (max-width: 768px) {
             .return-home-btn {
                 top: 0.5rem;
                 left: 0.5rem;
                 padding: 0.5rem 0.75rem;
                 font-size: 0.8rem;
+            }
+
+            .elevenlabs-theme-toggle {
+                top: 0.5rem;
+                right: 0.5rem;
             }
         }
     </style>
@@ -104,8 +118,11 @@
         Home
     </a>
 
+
     <div class="widget-container">
         <elevenlabs-convai agent-id="agent_5501k13tdhrgfc28jaz0n0cn07h7"></elevenlabs-convai>
     </div>
+
+    <script src="theme.js"></script>
 </body>
 </html>

@@ -43,14 +43,6 @@ function createBurgerMenu() {
                 </a>
             </div>
             <div class="burger-menu-item">
-                <a href="/music-studio" class="burger-menu-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                    </svg>
-                    Synthara
-                </a>
-            </div>
-            <div class="burger-menu-item">
                 <a href="/elevenlabs" class="burger-menu-link">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
@@ -208,7 +200,7 @@ function addGlobalFooter() {
     footer.innerHTML = `
         <div class="global-footer-content">
             <div class="global-footer-brand">
-                <h3 class="global-footer-title">Studio</h3>
+                <h3 class="global-footer-title">NAVADA</h3>
                 <p class="global-footer-subtitle">Transforming the Future of Music Creation</p>
             </div>
             <div class="global-footer-links">

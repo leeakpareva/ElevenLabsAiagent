@@ -1254,6 +1254,25 @@ p {
     font-weight: 600;
 }
 
+/* Global Theme Toggle Container - Fixed Position */
+.global-theme-toggle-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10000;
+}
+
+.global-theme-toggle {
+    box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 768px) {
+    .global-theme-toggle-container {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+}
+
 /* Theme Toggle */
 .ai-theme-toggle {
     position: relative;

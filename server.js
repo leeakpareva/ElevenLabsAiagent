@@ -38,12 +38,6 @@ app.get('/music', (req, res) => {
     res.sendFile(musicPath);
 });
 
-// Serve the Creative Music Studio page
-app.get('/music-studio', (req, res) => {
-    const musicStudioPath = path.join(__dirname, 'public', 'music-studio.html');
-    console.log('Serving Creative Music Studio page from:', musicStudioPath);
-    res.sendFile(musicStudioPath);
-});
 
 // Serve static files (after route handlers)
 app.use(express.static('public'));
