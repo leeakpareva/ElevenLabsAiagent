@@ -51,7 +51,7 @@ function createBurgerMenu() {
                 </a>
             </div>
             <div class="burger-menu-item">
-                <a href="/" class="burger-menu-link">
+                <a href="/elevenlabs" class="burger-menu-link">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
                         <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
@@ -100,6 +100,13 @@ function createAboutModal() {
                     <li>Explore infinite musical possibilities without technical barriers</li>
                     <li>Collaborate with AI that understands artistic intent</li>
                 </ul>
+
+                <h3>Synthara - Creative AI Music Studio</h3>
+                <p style="font-style: italic; color: var(--color-accent-primary); margin-bottom: 1rem;">
+                    "Where AI and Sound Become One."
+                </p>
+                <p>Synthara is our flagship creative AI music studio built for the next generation of artists, producers, and dreamers. It fuses the precision of artificial intelligence with the soul of human creativity—turning ideas into immersive soundscapes, beats, and melodies.</p>
+                <p>From real-time voice modulation to AI-driven composition and visual sound analysis, Synthara empowers creators to push past boundaries and discover new dimensions of music. Whether you're composing, experimenting, or collaborating, Synthara transforms inspiration into sound with elegance, speed, and limitless possibilities.</p>
 
                 <h3>Shaping Tomorrow's Soundscape</h3>
                 <p>We're not just creating music software – we're <span class="about-highlight">pioneering a new era</span> where human creativity and artificial intelligence dance together in perfect harmony. Every note generated, every melody crafted, and every composition born from NAVADA is a step toward a future where <strong>anyone can be a composer</strong>.</p>
@@ -200,12 +207,14 @@ function addGlobalFooter() {
 
     footer.innerHTML = `
         <div class="global-footer-content">
-            <p class="global-footer-text">
-                © 2024 NAVADA - Transforming the Future of Music Creation
-            </p>
+            <div class="global-footer-brand">
+                <h3 class="global-footer-title">MUSIC STUDIO</h3>
+                <p class="global-footer-subtitle">Transforming the Future of Music Creation</p>
+            </div>
             <div class="global-footer-links">
-                <a href="#" class="global-footer-link" onclick="showAbout(); return false;">About</a>
+                <a href="#" class="global-footer-link" onclick="showAbout(); return false;">About NAVADA</a>
                 <span class="global-footer-text">Designed & Developed by Lee Akpareva MBA, MA</span>
+                <span class="global-footer-year">© 2024 NAVADA</span>
             </div>
         </div>
     `;

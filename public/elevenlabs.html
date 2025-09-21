@@ -44,10 +44,65 @@
             visibility: visible !important;
             opacity: 1 !important;
         }
+
+        /* Return Home Button */
+        .return-home-btn {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .return-home-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .return-home-btn svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .return-home-btn:hover svg {
+            transform: translateX(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .return-home-btn {
+                top: 0.5rem;
+                left: 0.5rem;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
     <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" type="text/javascript"></script>
+
+    <!-- Return Home Button -->
+    <a href="/landing.html" class="return-home-btn" title="Return to main menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+        </svg>
+        Home
+    </a>
 
     <div class="widget-container">
         <elevenlabs-convai agent-id="agent_5501k13tdhrgfc28jaz0n0cn07h7"></elevenlabs-convai>

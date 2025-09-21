@@ -959,12 +959,25 @@ p {
     to { transform: rotate(360deg); }
 }
 
-/* Global Footer */
+/* Modern Global Footer */
 .global-footer {
-    background: var(--color-bg-secondary);
+    background: linear-gradient(135deg, var(--color-bg-secondary), var(--color-bg-tertiary));
     border-top: 1px solid var(--color-border-primary);
-    padding: 2rem 0;
-    margin-top: 4rem;
+    padding: 3rem 0 2rem;
+    margin-top: 6rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.global-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-secondary), var(--color-accent-primary));
+    opacity: 0.8;
 }
 
 .global-footer-content {
@@ -977,6 +990,28 @@ p {
     align-items: center;
 }
 
+.global-footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.global-footer-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+.global-footer-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
 .global-footer-text {
     color: var(--color-text-secondary);
     font-size: 0.875rem;
@@ -985,14 +1020,17 @@ p {
 
 .global-footer-links {
     display: flex;
-    gap: 1.5rem;
-    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-end;
+    text-align: right;
 }
 
 .global-footer-link {
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
+    font-weight: 500;
     transition: color var(--transition-base);
 }
 
@@ -1000,15 +1038,25 @@ p {
     color: var(--color-accent-primary);
 }
 
+.global-footer-year {
+    color: var(--color-text-tertiary);
+    font-size: 0.8rem;
+}
+
 @media (max-width: 768px) {
+    .global-footer {
+        padding: 2rem 0 1.5rem;
+    }
+
     .global-footer-content {
         grid-template-columns: 1fr;
         text-align: center;
-        gap: 1rem;
+        gap: 1.5rem;
     }
 
     .global-footer-links {
-        justify-content: center;
+        align-items: center;
+        text-align: center;
     }
 }
 
