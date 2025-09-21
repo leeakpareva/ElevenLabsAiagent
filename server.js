@@ -24,11 +24,11 @@ app.get('/', (req, res) => {
     res.sendFile(landingPath);
 });
 
-// Serve the main app
-app.get('/app', (req, res) => {
-    const appPath = path.join(__dirname, 'public', 'index.html');
-    console.log('Serving app from:', appPath);
-    res.sendFile(appPath);
+// Serve the ElevenLabs page
+app.get('/elevenlabs', (req, res) => {
+    const elevenLabsPath = path.join(__dirname, 'public', 'elevenlabs.html');
+    console.log('Serving ElevenLabs page from:', elevenLabsPath);
+    res.sendFile(elevenLabsPath);
 });
 
 // Serve static files (after route handlers)

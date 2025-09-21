@@ -9,13 +9,32 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap');
+
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>NAVADA</h1>
-            <p class="subtitle">AI Voice Assistant</p>
+            <nav style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; margin-bottom: 1rem;">
+                <div>
+                    <h1 style="margin: 0;">NAVADA</h1>
+                    <p class="subtitle" style="margin: 0;">AI Voice Assistant</p>
+                </div>
+                <div class="nav-links" style="display: flex; gap: 1.5rem;">
+                    <a href="/" style="color: #ff3333; text-decoration: none; font-weight: 500;">Home</a>
+                    <a href="/elevenlabs" style="color: #ff3333; text-decoration: none; font-weight: 500;">ElevenLabs</a>
+                </div>
+            </nav>
         </header>
 
         <div class="chat-container">
