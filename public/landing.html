@@ -28,13 +28,24 @@
             background: #000000;
         }
 
-        spline-viewer {
+        .spline-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75vw;
+            height: 75vh;
+            max-width: 900px;
+            max-height: 700px;
             z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        spline-viewer {
+            width: 100%;
+            height: 100%;
         }
 
 
@@ -113,6 +124,12 @@
 
         /* Enhanced mobile responsiveness */
         @media (max-width: 768px) {
+            .spline-container {
+                width: 80vw;
+                height: 60vh;
+                max-height: 500px;
+            }
+
             .landing-theme-toggle {
                 top: 1rem;
                 right: 1rem;
@@ -130,6 +147,12 @@
         }
 
         @media (max-width: 480px) {
+            .spline-container {
+                width: 85vw;
+                height: 50vh;
+                max-height: 400px;
+            }
+
             .nav-buttons {
                 flex-direction: column;
                 gap: 0.75rem;
@@ -147,7 +170,9 @@
 <body>
 
     <!-- Spline 3D Asset -->
-    <spline-viewer url="https://prod.spline.design/rGBFiZaGKnmjjQu9/scene.splinecode"></spline-viewer>
+    <div class="spline-container">
+        <spline-viewer url="https://prod.spline.design/rGBFiZaGKnmjjQu9/scene.splinecode"></spline-viewer>
+    </div>
 
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
