@@ -5,203 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>NAVADA - Evoque</title>
+    <title>NAVADA</title>
     <link rel="stylesheet" href="openai-styles.css">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.64/build/spline-viewer.js"></script>
     <style>
-        .ai-particles {
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: var(--color-bg-primary);
+        }
+
+        spline-viewer {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+            width: 100vw;
+            height: 100vh;
             z-index: 1;
         }
 
-        .ai-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--color-accent-primary);
-            border-radius: 50%;
-            opacity: 0;
-            animation: particleDrift 15s linear infinite;
-        }
-
-        @keyframes particleDrift {
-            0% {
-                opacity: 0;
-                transform: translate(0, 100vh) scale(0);
-            }
-            10% {
-                opacity: 0.3;
-                transform: translate(10vw, 80vh) scale(1);
-            }
-            50% {
-                opacity: 0.1;
-                transform: translate(-10vw, 40vh) scale(0.5);
-            }
-            90% {
-                opacity: 0.3;
-                transform: translate(5vw, 10vh) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(0, -10vh) scale(0);
-            }
-        }
-
-        .ai-gradient-orb {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle at center,
-                rgba(16, 163, 127, 0.15) 0%,
-                rgba(16, 163, 127, 0.05) 40%,
-                transparent 70%);
-            filter: blur(80px);
-            pointer-events: none;
-            animation: orbFloat 20s ease-in-out infinite;
-        }
-
-        .ai-gradient-orb:nth-child(1) {
-            top: -300px;
-            left: -300px;
-        }
-
-        .ai-gradient-orb:nth-child(2) {
-            bottom: -300px;
-            right: -300px;
-            animation-delay: -10s;
-        }
-
-        @keyframes orbFloat {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(50px, -50px) scale(1.1);
-            }
-            66% {
-                transform: translate(-50px, 50px) scale(0.9);
-            }
-        }
-
-        .ai-hero {
-            animation: heroFadeIn 1s ease-out;
-        }
-
-        @keyframes heroFadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .ai-hero-title {
-            position: relative;
-            display: inline-block;
-        }
-
-        .ai-hero-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--color-accent-primary);
-            border-radius: var(--radius-full);
-            animation: lineExpand 1s ease-out 0.5s both;
-        }
-
-        @keyframes lineExpand {
-            from {
-                width: 0;
-                opacity: 0;
-            }
-            to {
-                width: 60px;
-                opacity: 1;
-            }
-        }
-
-        .ai-choice-icon-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        .ai-choice-icon-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, var(--color-accent-tertiary), transparent);
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity var(--transition-slow);
-        }
-
-        .ai-choice-card:hover .ai-choice-icon-bg {
-            opacity: 0;
-        }
 
         /* Theme Toggle for Landing */
         .landing-theme-toggle {
             position: fixed;
             top: 2rem;
             right: 2rem;
-            z-index: 100;
+            z-index: 1000;
         }
 
-        /* Scroll Down Button */
-        .scroll-down-btn {
+        /* Navigation Buttons */
+        .nav-buttons {
             position: fixed;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
+            display: flex;
+            gap: 2rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
             background: rgba(16, 163, 127, 0.9);
             border: 2px solid rgba(16, 163, 127, 0.3);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            border-radius: 50px;
+            padding: 1rem 2rem;
             color: white;
+            cursor: pointer;
+            text-decoration: none;
             transition: all var(--transition-base);
-            animation: scrollPulse 2s ease-in-out infinite;
-            z-index: 200;
-            opacity: 0;
-            visibility: hidden;
+            font-family: var(--font-stack);
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .scroll-down-btn.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .scroll-down-btn:hover {
-            transform: translateX(-50%) scale(1.1);
+        .nav-btn:hover {
+            transform: scale(1.05);
             background: rgba(16, 163, 127, 1);
             box-shadow: 0 0 30px rgba(16, 163, 127, 0.6);
         }
 
-        @keyframes scrollPulse {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(-5px);
-            }
-        }
 
         /* Enhanced mobile responsiveness */
         @media (max-width: 768px) {
@@ -210,301 +75,44 @@
                 right: 1rem;
             }
 
-            .ai-hero-title {
-                font-size: 3rem;
-            }
-
-            .ai-hero-subtitle {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .ai-hero-cta {
-                padding: 1rem 2rem;
-                font-size: 1rem;
-            }
-
-            .ai-choice-container {
-                padding: 1rem;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                overflow-y: auto;
-            }
-
-            .ai-choice-grid {
-                grid-template-columns: 1fr;
+            .nav-buttons {
+                bottom: 1rem;
                 gap: 1rem;
-                max-width: 350px;
-                margin: 0 auto;
-                padding: 1rem 0;
             }
 
-            .ai-choice-card {
-                padding: 1.5rem 1rem;
-                min-height: auto;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .ai-choice-icon-wrapper {
-                margin-bottom: 1.5rem;
-            }
-
-            .ai-choice-title {
-                font-size: 1.5rem;
-                margin-bottom: 1rem;
-            }
-
-            .ai-choice-description {
-                font-size: 0.95rem;
-                line-height: 1.5;
-            }
-
-            .scroll-down-btn {
-                width: 50px;
-                height: 50px;
-                bottom: 1.5rem;
-            }
-
-            .scroll-down-btn svg {
-                width: 20px;
-                height: 20px;
+            .nav-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.875rem;
             }
         }
 
         @media (max-width: 480px) {
-            .ai-hero-title {
-                font-size: 2.5rem;
-                letter-spacing: 3px;
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+                bottom: 0.75rem;
             }
 
-            .ai-hero-subtitle {
-                font-size: 0.9rem;
-            }
-
-            .ai-hero-cta {
-                padding: 0.875rem 1.75rem;
-                font-size: 0.95rem;
-            }
-
-            .ai-choice-card {
-                padding: 1.5rem 1rem;
-            }
-
-            .ai-choice-title {
-                font-size: 1.25rem;
-            }
-
-            .ai-choice-description {
-                font-size: 0.875rem;
-            }
-
-            .scroll-down-btn {
-                width: 45px;
-                height: 45px;
-                bottom: 1rem;
-            }
-
-            .ai-choice-title {
-                font-size: 1.1rem;
-            }
-
-            .ai-choice-description {
+            .nav-btn {
+                padding: 0.65rem 1.25rem;
                 font-size: 0.8rem;
-                line-height: 1.4;
             }
         }
 
-        /* Page Scroll Indicator */
-        .page-scroll-indicator {
-            position: fixed;
-            left: 1rem;
-            top: 60%;
-            transform: translateY(-50%);
-            z-index: 500;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: all var(--transition-base);
-        }
-
-        .page-scroll-indicator.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .scroll-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(16, 163, 127, 0.3);
-            transition: all var(--transition-base);
-            cursor: pointer;
-        }
-
-        .scroll-dot.active {
-            background: var(--color-accent-primary);
-            transform: scale(1.5);
-        }
-
-        .scroll-dot:hover {
-            background: var(--color-accent-primary);
-        }
-
-
-        @media (max-width: 768px) {
-            .page-scroll-indicator {
-                left: 0.5rem;
-                top: 65%;
-            }
-
-            .scroll-dot {
-                width: 6px;
-                height: 6px;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <div class="ai-particles" id="particles"></div>
-    <div class="ai-gradient-orb"></div>
-    <div class="ai-gradient-orb"></div>
+    <!-- Spline 3D Asset -->
+    <spline-viewer url="https://prod.spline.design/rGBFiZaGKnmjjQu9/scene.splinecode"></spline-viewer>
 
-
-    <div class="ai-hero" id="landing-hero">
-        <div class="ai-hero-content">
-            <h1 class="ai-hero-title" onclick="enterApp()">NAVADA</h1>
-            <p class="ai-hero-subtitle">Next-generation AI Music Studio</p>
-            <a href="#" class="ai-hero-cta" onclick="enterApp(); return false;">
-                <span>Get Started</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-            </a>
-        </div>
-    </div>
-
-    <div class="ai-choice-container" id="choice-menu" style="display: none;">
-        <div class="ai-hero-content">
-            <h2 class="ai-hero-title">Choose Your Experience</h2>
-            <p class="ai-hero-subtitle">Select an AI assistant mode</p>
-        </div>
-
-        <div class="ai-choice-grid">
-            <div class="ai-choice-card" onclick="goToApp('/elevenlabs')">
-                <div class="ai-choice-icon-wrapper">
-                    <div class="ai-choice-icon-bg"></div>
-                    <div class="ai-choice-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0d7a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                            <line x1="12" x2="12" y1="19" y2="22"/>
-                        </svg>
-                    </div>
-                </div>
-                <h3 class="ai-choice-title">Evoque</h3>
-                <p class="ai-choice-description">Interactive AI-powered conversations with natural voice synthesis</p>
-            </div>
-
-            <div class="ai-choice-card" onclick="goToApp('/music')">
-                <div class="ai-choice-icon-wrapper">
-                    <div class="ai-choice-icon-bg"></div>
-                    <div class="ai-choice-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0d7a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 18V5l12-2v13"/>
-                            <circle cx="6" cy="18" r="3"/>
-                            <circle cx="18" cy="16" r="3"/>
-                        </svg>
-                    </div>
-                </div>
-                <h3 class="ai-choice-title">SYNTHARA</h3>
-                <p class="ai-choice-description">Generate and compose music with advanced AI algorithms</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scroll Down Button -->
-    <button class="scroll-down-btn" id="scrollDownBtn" title="Scroll to choose experience">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
-        </svg>
-    </button>
-
-    <!-- Page Scroll Indicator -->
-    <div class="page-scroll-indicator" id="pageScrollIndicator">
-        <div class="scroll-dot active" data-section="hero" title="Welcome"></div>
-        <div class="scroll-dot" data-section="choice" title="Choose Experience"></div>
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <a href="/elevenlabs" class="nav-btn">Evoque</a>
+        <a href="/music" class="nav-btn">Synthara</a>
     </div>
 
     <script>
-        // Create floating particles
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 30;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'ai-particle';
-
-                // Random position
-                particle.style.left = Math.random() * 100 + '%';
-
-                // Random animation delay
-                particle.style.animationDelay = Math.random() * 15 + 's';
-
-                // Random animation duration
-                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-
-                // Random size
-                const size = Math.random() * 3 + 1;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Enter the app selection menu
-        function enterApp() {
-            const hero = document.getElementById('landing-hero');
-            const choiceMenu = document.getElementById('choice-menu');
-
-            // Fade out hero
-            hero.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-            hero.style.opacity = '0';
-            hero.style.transform = 'scale(0.95)';
-
-            setTimeout(() => {
-                hero.style.display = 'none';
-                choiceMenu.style.display = 'flex';
-                choiceMenu.style.opacity = '0';
-
-                setTimeout(() => {
-                    choiceMenu.style.transition = 'opacity 0.5s ease-out';
-                    choiceMenu.style.opacity = '1';
-                }, 50);
-            }, 500);
-        }
-
-        // Navigate to selected app
-        function goToApp(path) {
-            const choiceMenu = document.getElementById('choice-menu');
-            choiceMenu.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-            choiceMenu.style.opacity = '0';
-            choiceMenu.style.transform = 'scale(1.05)';
-
-            setTimeout(() => {
-                window.location.href = path;
-            }, 500);
-        }
-
         // Theme management
         function initTheme() {
             const savedTheme = localStorage.getItem('navada-theme');
@@ -528,34 +136,9 @@
             }, 300);
         }
 
-        // Initialize particles and theme on load
+        // Initialize theme on load
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
-            createParticles();
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-        });
-
-        // Handle keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && document.getElementById('landing-hero').style.display !== 'none') {
-                enterApp();
-            }
-        });
-
-        // Add touch feedback for mobile
-        let touchStartY = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            const touchEndY = e.changedTouches[0].clientY;
-            const swipeDistance = touchStartY - touchEndY;
-
-            // Swipe up to enter app
-            if (swipeDistance > 50 && document.getElementById('landing-hero').style.display !== 'none') {
-                enterApp();
-            }
         });
 
         // Prevent zoom on double tap
@@ -580,6 +163,5 @@
     </script>
     <script src="theme.js"></script>
     <script src="global-menu.js"></script>
-    <script src="landing.js"></script>
 </body>
 </html>
