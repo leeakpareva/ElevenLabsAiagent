@@ -9,6 +9,7 @@
     "dev": "node server.js"
   },
   "dependencies": {
+    "@brave/brave-search-mcp-server": "^2.0.10",
     "@elevenlabs/elevenlabs-js": "^2.15.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

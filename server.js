@@ -8,7 +8,7 @@ import { dirname, join } from 'path';
 import path from 'path';
 import fs from 'fs';
 
-dotenv.config();
+dotenv.config({ override: true });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -51,27 +51,86 @@ const openai = new OpenAI({
 });
 
 const VOICE_ID = 'JBFqnCBsd6RMkjVDRZzb'; // George voice
-const SYSTEM_PROMPT = `You are NAVADA, a sophisticated AI assistant with a friendly yet professional personality. 
+const SYSTEM_PROMPT = `You are LESLIE, a sophisticated AI voice assistant with web search capabilities and a friendly yet professional personality.
+
+You have access to real-time web search through Brave Search API. When users ask questions that require current information, web search, or recent events, you should search the web to provide accurate, up-to-date responses.
 
 Structure your responses clearly with:
 1. Direct answer first
 2. Brief explanation or context
 3. Follow-up question if appropriate
 
-Keep responses conversational but well-structured. Use natural paragraph breaks for longer responses. 
+Keep responses conversational but well-structured. Use natural paragraph breaks for longer responses.
 Avoid markdown, code blocks, or special formatting since you're speaking through voice synthesis.
-Aim for 2-4 sentences per response, using proper paragraph structure when needed.`;
+Aim for 2-4 sentences per response, using proper paragraph structure when needed.
+
+When you need to search the web, determine appropriate search terms and use the search functionality to get current information.`;
+
+// Brave Search API function
+async function searchWeb(query) {
+    try {
+        const response = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}`, {
+            headers: {
+                'Accept': 'application/json',
+                'Accept-Encoding': 'gzip',
+                'X-Subscription-Token': process.env.BRAVE_API_KEY
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Brave Search API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Brave Search API Error:', error);
+        return null;
+    }
+}
+
+// Determine if a query needs web search
+function needsWebSearch(message) {
+    const webSearchIndicators = [
+        'current', 'latest', 'recent', 'today', 'news', 'weather', 'stock price',
+        'what is happening', 'what happened', 'breaking news', 'update',
+        'now', 'this week', 'this month', 'this year', '2024', '2025',
+        'search for', 'look up', 'find information about', 'tell me about'
+    ];
+
+    const lowerMessage = message.toLowerCase();
+    return webSearchIndicators.some(indicator => lowerMessage.includes(indicator));
+}
 
 // AI response generator using OpenAI
 async function generateAIResponse(userMessage, conversationHistory) {
     try {
         console.log('Calling OpenAI API with message:', userMessage);
-        
+
+        let searchResults = null;
+        let enhancedMessage = userMessage;
+
+        // Check if we need to perform a web search
+        if (needsWebSearch(userMessage)) {
+            console.log('Performing web search for:', userMessage);
+            searchResults = await searchWeb(userMessage);
+
+            if (searchResults && searchResults.web && searchResults.web.results) {
+                const topResults = searchResults.web.results.slice(0, 3);
+                const searchInfo = topResults.map(result =>
+                    `Title: ${result.title}\nSnippet: ${result.description}\nURL: ${result.url}`
+                ).join('\n\n');
+
+                enhancedMessage = `${userMessage}\n\nWeb Search Results:\n${searchInfo}\n\nPlease provide a response based on this current information.`;
+                console.log('Enhanced message with search results');
+            }
+        }
+
         // Build messages array for OpenAI
         const messages = [
             { role: 'system', content: SYSTEM_PROMPT }
         ];
-        
+
         // Add conversation history
         conversationHistory.forEach(msg => {
             messages.push({
@@ -79,9 +138,9 @@ async function generateAIResponse(userMessage, conversationHistory) {
                 content: msg.content
             });
         });
-        
-        // Add current user message
-        messages.push({ role: 'user', content: userMessage });
+
+        // Add current user message (potentially enhanced with search results)
+        messages.push({ role: 'user', content: enhancedMessage });
         
         console.log('OpenAI messages array length:', messages.length);
         
@@ -353,6 +412,34 @@ app.post('/api/chat', async (req, res) => {
             error: 'Failed to generate response',
             details: error.message 
         });
+    }
+});
+
+// Web search endpoint
+app.post('/api/search', async (req, res) => {
+    try {
+        const { query } = req.body;
+
+        if (!query) {
+            return res.status(400).json({ error: 'Search query is required' });
+        }
+
+        console.log('Performing web search for:', query);
+
+        const searchResults = await searchWeb(query);
+
+        if (!searchResults) {
+            return res.status(500).json({ error: 'Search failed' });
+        }
+
+        res.json({
+            query: query,
+            results: searchResults,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Search endpoint error:', error);
+        res.status(500).json({ error: 'Failed to perform search' });
     }
 });
 

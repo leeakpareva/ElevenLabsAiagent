@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "@brave/brave-search-mcp-server"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "BSAnhhdZrQwrhhonDBjKQblwSlU7cgT"
+      }
+    }
+  }
+}
