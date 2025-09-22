@@ -17,11 +17,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve landing page as default
+// Serve landing page as default (now the password page)
 app.get('/', (req, res) => {
     const landingPath = path.join(__dirname, 'public', 'landing.html');
-    console.log('Serving landing page from:', landingPath);
+    console.log('Serving password page from:', landingPath);
     res.sendFile(landingPath);
+});
+
+// Serve the home page (main site after authentication)
+app.get('/home.html', (req, res) => {
+    const homePath = path.join(__dirname, 'public', 'home.html');
+    console.log('Serving home page from:', homePath);
+    res.sendFile(homePath);
 });
 
 // Serve the ElevenLabs page
