@@ -216,6 +216,11 @@ function addGlobalFooter() {
 
 // Initialize footer on load
 document.addEventListener('DOMContentLoaded', function() {
-    // Add a small delay to ensure all content is loaded
-    setTimeout(addGlobalFooter, 100);
+    // Only add footer if we're not on the landing page
+    const isLandingPage = window.location.pathname === '/' || window.location.pathname.includes('landing.html');
+
+    if (!isLandingPage) {
+        // Add a small delay to ensure all content is loaded
+        setTimeout(addGlobalFooter, 100);
+    }
 });
