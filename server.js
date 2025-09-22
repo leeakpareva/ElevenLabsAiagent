@@ -38,6 +38,13 @@ app.get('/music', (req, res) => {
     res.sendFile(musicPath);
 });
 
+// Serve the Laura Career Coach page
+app.get('/laura', (req, res) => {
+    const lauraPath = path.join(__dirname, 'public', 'laura.html');
+    console.log('Serving Laura Career Coach page from:', lauraPath);
+    res.sendFile(lauraPath);
+});
+
 
 // Serve static files (after route handlers)
 app.use(express.static('public'));
