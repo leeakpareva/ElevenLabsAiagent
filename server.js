@@ -71,6 +71,8 @@ Keep responses conversational but well-structured. Use natural paragraph breaks 
 Avoid markdown, code blocks, or special formatting since you're speaking through voice synthesis.
 Aim for 2-4 sentences per response, using proper paragraph structure when needed.
 
+IMPORTANT: Always use proper punctuation and spacing in your responses. End sentences with periods, commas, or appropriate punctuation marks. Ensure clear spacing between words and sentences for optimal text-to-speech clarity.
+
 When you need to search the web, determine appropriate search terms and use the search functionality to get current information.`;
 
 // Brave Search API function
@@ -107,6 +109,34 @@ function needsWebSearch(message) {
 
     const lowerMessage = message.toLowerCase();
     return webSearchIndicators.some(indicator => lowerMessage.includes(indicator));
+}
+
+// Format text for TTS with proper punctuation and spacing
+function formatTextForTTS(text) {
+    if (!text) return text;
+
+    let formatted = text.trim();
+
+    // Ensure sentences end with proper punctuation
+    formatted = formatted.replace(/([a-zA-Z0-9])\s*$/, '$1.');
+
+    // Fix spacing around punctuation
+    formatted = formatted.replace(/\s*([.!?])\s*/g, '$1 ');
+    formatted = formatted.replace(/\s*([,;:])\s*/g, '$1 ');
+
+    // Fix multiple spaces
+    formatted = formatted.replace(/\s+/g, ' ');
+
+    // Ensure proper spacing after sentence endings
+    formatted = formatted.replace(/([.!?])\s*([A-Z])/g, '$1 $2');
+
+    // Remove trailing spaces and ensure final punctuation
+    formatted = formatted.trim();
+    if (!/[.!?]$/.test(formatted)) {
+        formatted += '.';
+    }
+
+    return formatted;
 }
 
 // AI response generator using OpenAI
@@ -160,7 +190,10 @@ async function generateAIResponse(userMessage, conversationHistory) {
         });
         
         console.log('OpenAI API call successful');
-        return completion.choices[0].message.content;
+        const rawResponse = completion.choices[0].message.content;
+        const formattedResponse = formatTextForTTS(rawResponse);
+        console.log('Formatted response:', formattedResponse);
+        return formattedResponse;
     } catch (error) {
         console.error('OpenAI API Error Details:', {
             message: error.message,
@@ -181,11 +214,11 @@ async function generateAIResponse(userMessage, conversationHistory) {
         const lowerMessage = userMessage.toLowerCase();
         for (const [key, response] of Object.entries(fallbackResponses)) {
             if (lowerMessage.includes(key)) {
-                return response;
+                return formatTextForTTS(response);
             }
         }
-        
-        return "I'm having trouble connecting right now, but I'm still here to help! What would you like to talk about?";
+
+        return formatTextForTTS("I'm having trouble connecting right now, but I'm still here to help! What would you like to talk about?");
     }
 }
 
