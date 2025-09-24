@@ -7,7 +7,7 @@ const Password = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (secret === '54321') {
+    if (secret === '369963') {
       alert('Access granted!');
       // Add your logic here for successful authentication
     } else {
