@@ -13,7 +13,12 @@
       "Bash(git commit:*)",
       "Bash(npm install:*)",
       "Bash(npm uninstall:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(netstat:*)",
+      "Bash(ren:*)",
+      "Bash(move:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []
